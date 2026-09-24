@@ -1,0 +1,13 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*.local
+.vite/
+playwright-report/
+test-results/
+*.log
+.local-evidence/
+.playwright-cli/
+*.tsbuildinfo
+dist-types/

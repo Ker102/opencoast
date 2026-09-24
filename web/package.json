@@ -1,0 +1,17 @@
+{
+  "name": "@opencoast/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {"dev": "vite --host 0.0.0.0", "build": "tsc -p tsconfig.json && vite build", "preview": "vite preview --host 0.0.0.0"},
+  "dependencies": {
+    "@opencoast/shared": "0.1.0",
+    "lucide-react": "^1.48.0",
+    "maplibre-gl": "^6.11.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "terra-draw": "^1.35.0",
+    "terra-draw-maplibre-gl-adapter": "^1.4.1"
+  },
+  "devDependencies": {"@types/react": "^19.0.0", "@types/react-dom": "^19.0.0", "@vitejs/plugin-react": "^6.1.1", "vite": "^8.3.1"}
+}

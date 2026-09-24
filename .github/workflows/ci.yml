@@ -1,0 +1,39 @@
+name: CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgis:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: opencoast
+          POSTGRES_PASSWORD: opencoast_local
+          POSTGRES_DB: opencoast_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U opencoast -d opencoast_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgres://opencoast:opencoast_local@localhost:5432/opencoast_test
+      INTEGRATION_TEST: '1'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run db:migrate -w api
+      - run: npm test
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm audit --audit-level=high

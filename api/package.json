@@ -1,0 +1,30 @@
+{
+  "name": "@opencoast/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "db:migrate": "tsx src/migrate.ts",
+    "moderator:create": "tsx src/create-moderator.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1140.0",
+    "@fastify/cookie": "^11.0.0",
+    "@fastify/cors": "^11.0.0",
+    "@fastify/multipart": "^9.0.0",
+    "@fastify/rate-limit": "^10.0.0",
+    "@opencoast/shared": "0.1.0",
+    "dotenv": "^17.0.0",
+    "fastify": "^5.12.5",
+    "file-type": "^21.0.0",
+    "pg": "^8.23.0",
+    "sharp": "^0.35.4"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.0",
+    "tsx": "^4.0.0"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "opencoast",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "shared",
+    "api",
+    "web"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c cyan,green \"npm run dev -w api\" \"npm run dev -w web\"",
+    "test": "vitest run",
+    "format": "prettier --write \"{web,api,shared}/src/**/*.{ts,tsx,css}\"",
+    "format:check": "prettier --check \"{web,api,shared}/src/**/*.{ts,tsx,css}\"",
+    "typecheck": "tsc -b",
+    "build": "npm run build -w shared && npm run build -w api && npm run build -w web",
+    "db:migrate": "npm run db:migrate -w api"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "concurrently": "^9.0.0",
+    "prettier": "^3.9.9",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.0"
+  }
+}

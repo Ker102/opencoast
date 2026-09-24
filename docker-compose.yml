@@ -1,0 +1,15 @@
+services:
+  postgis:
+    image: postgis/postgis:17-3.5
+    environment:
+      POSTGRES_USER: opencoast
+      POSTGRES_PASSWORD: opencoast_local
+      POSTGRES_DB: opencoast
+    ports: ["54329:5432"]
+    volumes: ["postgis-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U opencoast"]
+      interval: 3s
+      retries: 20
+volumes:
+  postgis-data:
