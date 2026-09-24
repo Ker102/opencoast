@@ -18,7 +18,8 @@ Build a public-source global coastal access map with accurate reviewed records, 
 - [x] Shared schema, spatial database, API, map, drawing, receipt, evidence, moderation, and revision history implemented.
 - [x] Database-backed integration flow passes in isolated test database; no legal records seeded.
 - [x] Desktop and narrow viewport browser inspection; point, route, and area drawing verified in browser.
-- [x] Public GitHub repository and CI created; clean-checkout script order corrected after the first CI run.
+- [x] Public GitHub repository and CI created; clean-checkout run is green.
+- [x] Follow-up work tracked as [GitHub issues](https://github.com/Ker102/opencoast/issues).
 - [ ] Real iOS Safari and Android Chrome touch testing.
 - [ ] Hosted Supabase, R2, Cloud Run, and Vercel credentials and deployment.
 - [ ] First Montenegro records checked by two moderators.
