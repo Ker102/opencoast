@@ -8,6 +8,7 @@ The code is public and accepts technical contributions. The live database and pr
 
 - Responsive global map using MapLibre and an OpenStreetMap-derived OpenFreeMap style, with visible attribution.
 - Reviewed areas, routes, and points with access status, evidence label, local category, conditions, sources, and separate edit and source-review dates.
+- Explicit moderator-reviewed links from an access area to separately reviewed approach routes. The area shows a verified land route only while a linked route remains visible, document backed, and allowed or conditional.
 - Desktop and touch-friendly drawing with vertex editing, undo, geometry review, and an anonymous submission form.
 - Private receipt link, optional source link and file evidence, and a reply path when a moderator asks for clarification.
 - Moderator sign-in, queue, private evidence inspection, audited wording edits, approval, rejection, clarification, public revision history, and selected sanitized image publication.
@@ -74,6 +75,6 @@ The public basemap URL can be replaced with `VITE_MAP_STYLE_URL`. OpenFreeMap is
 
 ## Current release limits
 
-This is an initial working implementation, not a legal authority. No jurisdiction-wide law is automatically applied to beaches. Hand-drawn shapes are labeled approximate. Area records do not claim a verified land route until links to separately reviewed route records are implemented. File scanning, durable abuse controls across API replicas, accessibility audits, and real iOS Safari/Android Chrome touch checks are release gates before broad public use. No hosted account or domain has been connected yet.
+This is an initial working implementation, not a legal authority. No jurisdiction-wide law is automatically applied to beaches. Hand-drawn shapes are labeled approximate. A route is never inferred from proximity; a moderator must link it after checking geometry and sources. File scanning, durable abuse controls across API replicas, accessibility audits, and real iOS Safari/Android Chrome touch checks are release gates before broad public use. No hosted account or domain has been connected yet.
 
 Code is MIT licensed; approved record data and third-party sources have separate rights. See [CONTRIBUTING.md](CONTRIBUTING.md) for code changes and map submissions.

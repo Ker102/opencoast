@@ -347,6 +347,16 @@ suite('moderated coastal information flow', () => {
       routeIds: [routeId],
       reason: 'Reviewed the approach route and area together.',
     };
+    const preflight = await app.inject({
+      method: 'OPTIONS',
+      url: `/moderation/records/${areaId}/routes`,
+      headers: {
+        origin,
+        'access-control-request-method': 'PUT',
+        'access-control-request-headers': 'content-type',
+      },
+    });
+    expect(preflight.headers['access-control-allow-methods']).toContain('PUT');
     expect(
       (
         await app.inject({
@@ -382,6 +392,13 @@ suite('moderated coastal information flow', () => {
       payload: { routeIds: [routeId, routeId], reason: linkRequest.reason },
     });
     expect(duplicate.statusCode).toBe(400);
+    const wrongKind = await app.inject({
+      method: 'PUT',
+      url: `/moderation/records/${areaId}/routes`,
+      headers: { cookie: moderatorCookie, origin },
+      payload: { routeIds: [areaId], reason: linkRequest.reason },
+    });
+    expect(wrongKind.statusCode).toBe(400);
     const linked = await app.inject({
       method: 'PUT',
       url: `/moderation/records/${areaId}/routes`,
@@ -393,11 +410,48 @@ suite('moderated coastal information flow', () => {
     expect(linkedArea.properties.landRouteStatus).toBe('verified');
     expect(linkedArea.properties.linkedRouteIds).toEqual([routeId]);
     expect(linkedArea.properties.revision).toBe(2);
+    const noChange = await app.inject({
+      method: 'PUT',
+      url: `/moderation/records/${areaId}/routes`,
+      headers: { cookie: moderatorCookie, origin },
+      payload: linkRequest,
+    });
+    expect(noChange.statusCode).toBe(409);
     const publicRoutes = (await app.inject(`/records/${areaId}/routes`)).json().routes;
     expect(publicRoutes.map((item: { properties: { id: string } }) => item.properties.id)).toEqual([
       routeId,
     ]);
     expect((await app.inject(`/records/${areaId}/history`)).json().revisions).toHaveLength(2);
+
+    const movedRoute = await app.inject({
+      method: 'POST',
+      url: '/proposals',
+      remoteAddress: '127.0.0.2',
+      payload: {
+        ...route,
+        targetRecordId: routeId,
+        geometry: {
+          type: 'LineString',
+          coordinates: [
+            [18.897, 42.198],
+            [18.9, 42.2],
+          ],
+        },
+      },
+    });
+    expect(movedRoute.statusCode).toBe(201);
+    const blockedMove = await app.inject({
+      method: 'POST',
+      url: `/moderation/proposals/${movedRoute.json().id}/review`,
+      headers: { cookie: moderatorCookie, origin },
+      payload: {
+        action: 'approve',
+        explanation: 'This movement must wait until the existing link is reviewed.',
+        evidenceLevel: 'document_backed',
+        reviewedSources: true,
+      },
+    });
+    expect(blockedMove.statusCode).toBe(409);
 
     await publish(
       { ...route, targetRecordId: routeId, accessStatus: 'restricted' },

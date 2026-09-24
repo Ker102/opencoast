@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, ExternalLink, History, Info, MapPinned } from 'lucide-react';
 import type { RecordFeature } from '@opencoast/shared';
-import { API_URL, getHistory, getPublicEvidence } from './api';
+import { API_URL, getAreaRoutes, getHistory, getPublicEvidence } from './api';
 
 const statusLabels: Record<string, string> = {
   allowed: 'Access allowed',
@@ -19,17 +19,23 @@ export default function RecordDetail({
   feature,
   onClose,
   onSuggest,
+  onFocusRoute,
+  onManageRoutes,
 }: {
   feature: RecordFeature;
   onClose: () => void;
   onSuggest: () => void;
+  onFocusRoute: (route: RecordFeature) => void;
+  onManageRoutes: () => void;
 }) {
   const p = feature.properties;
   const [history, setHistory] = useState<Array<{ revision: number; editedAt: string }>>([]);
   const [evidence, setEvidence] = useState<Array<{ id: string; name: string; url: string }>>([]);
+  const [routes, setRoutes] = useState<RecordFeature[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   useEffect(() => {
     let live = true;
+    setRoutes([]);
     getHistory(p.id)
       .then((data) => {
         if (live) setHistory(data.revisions);
@@ -40,6 +46,12 @@ export default function RecordDetail({
         if (live) setEvidence(data.evidence);
       })
       .catch(() => {});
+    if (p.kind === 'area')
+      getAreaRoutes(p.id)
+        .then((data) => {
+          if (live) setRoutes(data.routes);
+        })
+        .catch(() => {});
     return () => {
       live = false;
     };
@@ -81,12 +93,41 @@ export default function RecordDetail({
         </div>
       )}
       {p.kind === 'area' && (
-        <div className="notice">
-          <Info size={18} />
-          {p.landRouteStatus === 'verified'
-            ? 'A land route is recorded as verified. Check its separate route record.'
-            : 'Land route not verified. This area record does not establish a route from land.'}
-        </div>
+        <>
+          <div className="notice">
+            <Info size={18} />
+            {p.landRouteStatus === 'verified'
+              ? 'A document-backed approach route is linked. Check its separate route record for conditions.'
+              : routes.length
+                ? 'Land route not verified. Linked route information exists, but no current document-backed allowed or conditional approach has been verified.'
+                : 'Land route not verified. This area record does not establish a route from land.'}
+          </div>
+          <div className="detail-block">
+            <h3>Approach routes</h3>
+            {routes.length ? (
+              <ul className="linked-routes">
+                {routes.map((route) => (
+                  <li key={route.properties.id}>
+                    <button className="linked-route" onClick={() => onFocusRoute(route)}>
+                      <strong>{route.properties.title}</strong>
+                      <small>
+                        {statusLabels[route.properties.accessStatus]} ·{' '}
+                        {route.properties.evidenceLevel === 'document_backed'
+                          ? 'Document backed'
+                          : 'No official source verified'}
+                      </small>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No separately reviewed approach route is linked to this area.</p>
+            )}
+            <button className="text-button" onClick={onManageRoutes}>
+              Manage approach routes (moderators)
+            </button>
+          </div>
+        </>
       )}
       {p.geometryPrecision === 'approximate' && (
         <div className="notice">

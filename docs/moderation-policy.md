@@ -6,6 +6,8 @@ The map describes what the submitted evidence supports. Moderators verify a prop
 
 No coast is colored because of a countrywide rule alone. A submitted boundary remains **approximate** until an authoritative geometry is obtained and separately checked. A beach area does not establish a land access route. Review a route as its own record.
 
+An approach route must also be explicitly linked to an area by a moderator who checks that the route actually reaches it. The link has a written audit reason and appears in the area's public revision history. A linked route counts as a verified land approach only while its current record is visible, document backed, and marked allowed or conditional. A community-reviewed, disputed, restricted, or unknown route may be shown as related information, but does not verify an approach. If the route changes status, the area's land-route label updates accordingly. Remove links before moving linked geometry so the relationship can be checked again.
+
 ## Evidence labels
 
 - **Document backed:** At least one linked official source was checked against the claim and geometry. Quote or summarize its relevant provision in the moderator explanation. Explain uncertain boundaries and exceptions.

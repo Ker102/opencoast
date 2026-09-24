@@ -24,6 +24,9 @@ export function getHistory(id: string) {
     `/records/${id}/history`,
   );
 }
+export function getAreaRoutes(id: string) {
+  return json<{ routes: RecordFeature[] }>(`/records/${id}/routes`);
+}
 export function getPublicEvidence(id: string) {
   return json<{ evidence: Array<{ id: string; name: string; url: string }> }>(
     `/records/${id}/evidence`,
@@ -127,5 +130,25 @@ export function saveModeratorEdit(id: string, proposal: ProposalInput, reason: s
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ proposal, reason }),
+  });
+}
+
+export interface RouteCandidate {
+  id: string;
+  title: string;
+  accessStatus: string;
+  evidenceLevel: string;
+  distanceMeters: number;
+  selected: boolean;
+  geometry: Geometry;
+}
+export function getRouteCandidates(areaId: string) {
+  return json<{ routes: RouteCandidate[] }>(`/moderation/records/${areaId}/route-candidates`);
+}
+export function saveRouteLinks(areaId: string, routeIds: string[], reason: string) {
+  return json<{ ok: boolean; feature: RecordFeature }>(`/moderation/records/${areaId}/routes`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ routeIds, reason }),
   });
 }

@@ -45,6 +45,7 @@ export default function App() {
   const [draftGeometry, setDraftGeometry] = useState<Geometry | null>(null);
   const [focusGeometry, setFocusGeometry] = useState<Geometry | null>(null);
   const [targetRecord, setTargetRecord] = useState<RecordFeature | null>(null);
+  const [routeArea, setRouteArea] = useState<RecordFeature | null>(null);
   const [draw, setDraw] = useState<TerraDraw | null>(null);
   const [receipt, setReceipt] = useState<{ id: string; token: string } | null>(() => {
     const id = window.location.pathname.split('/')[2];
@@ -55,6 +56,10 @@ export default function App() {
   const [searchError, setSearchError] = useState('');
   const [mobileMenu, setMobileMenu] = useState(false);
   const lastBbox = useRef<string>('');
+  const sidebarContent = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    sidebarContent.current?.scrollTo({ top: 0 });
+  }, [selected?.properties.id]);
   useEffect(() => {
     const handler = () => {
       setMode(routeFromLocation());
@@ -92,7 +97,7 @@ export default function App() {
       const feature = records.features.find((f) => f.properties.id === id);
       if (feature) {
         setSelected(feature);
-        setMobileMenu(false);
+        setMobileMenu(true);
       }
     },
     [records],
@@ -117,6 +122,7 @@ export default function App() {
   const backToMap = () => {
     setFocusGeometry(null);
     setSelected(null);
+    setRouteArea(null);
     navigate('/', 'map');
   };
   const goToCoordinates = (event: React.FormEvent) => {
@@ -155,7 +161,10 @@ export default function App() {
           </button>
         </header>
         {mode === 'map' && (
-          <div className="sidebar-content">
+          <div
+            className={`sidebar-content ${selected ? 'has-selection' : ''}`}
+            ref={sidebarContent}
+          >
             <form className="search-box" onSubmit={goToCoordinates}>
               <Search size={20} />
               <input
@@ -221,8 +230,21 @@ export default function App() {
             {selected ? (
               <RecordDetail
                 feature={selected}
-                onClose={() => setSelected(null)}
+                onClose={() => {
+                  setSelected(null);
+                  setMobileMenu(false);
+                }}
                 onSuggest={() => startContribution(selected)}
+                onFocusRoute={(route) => {
+                  setSelected(route);
+                  setFocusGeometry(route.geometry);
+                  setMobileMenu(true);
+                }}
+                onManageRoutes={() => {
+                  setRouteArea(selected);
+                  setSelected(null);
+                  navigate('/moderation', 'moderation');
+                }}
               />
             ) : (
               <div className="empty-state">
@@ -270,7 +292,13 @@ export default function App() {
               <Plus size={23} /> Add information
             </button>
             <div className="sidebar-footer">
-              <button className="text-button" onClick={() => navigate('/moderation', 'moderation')}>
+              <button
+                className="text-button"
+                onClick={() => {
+                  setRouteArea(null);
+                  navigate('/moderation', 'moderation');
+                }}
+              >
                 Moderator desk
               </button>
               <a
@@ -303,6 +331,7 @@ export default function App() {
           <Moderation
             onBack={backToMap}
             onFocus={setFocusGeometry}
+            routeArea={routeArea}
             onPublished={() => {
               if (lastBbox.current) refresh(lastBbox.current);
             }}

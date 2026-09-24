@@ -71,10 +71,14 @@ export async function replaceRouteLinks(
     const before = prior.rows.map((row) => row.route_id);
     if (before.length === ids.length && before.every((id, index) => id === ids[index]))
       throw new ReviewError('Route links are unchanged', 409);
-    await client.query('DELETE FROM access_route_links WHERE area_id=$1', [areaId]);
+    await client.query(
+      'DELETE FROM access_route_links WHERE area_id=$1 AND NOT (route_id=ANY($2::uuid[]))',
+      [areaId, ids],
+    );
     for (const routeId of ids)
       await client.query(
-        'INSERT INTO access_route_links (area_id,route_id,created_by) VALUES ($1,$2,$3)',
+        `INSERT INTO access_route_links (area_id,route_id,created_by) VALUES ($1,$2,$3)
+         ON CONFLICT (area_id,route_id) DO NOTHING`,
         [areaId, routeId, moderatorId],
       );
     const time = await client.query<{ now: Date }>('SELECT now()');

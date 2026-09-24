@@ -46,7 +46,11 @@ async function requireModerator(request: FastifyRequest): Promise<string> {
 export async function createApp() {
   const app = Fastify({ logger: process.env.NODE_ENV !== 'test', bodyLimit: 1_000_000 });
   await app.register(cookie);
-  await app.register(cors, { origin: config.webOrigin, credentials: true });
+  await app.register(cors, {
+    origin: config.webOrigin,
+    credentials: true,
+    methods: ['GET', 'HEAD', 'POST', 'PUT'],
+  });
   await app.register(rateLimit, { global: false });
   await app.register(multipart, { limits: { fileSize: 10_485_760, files: 1, fields: 0 } });
 
@@ -62,7 +66,12 @@ export async function createApp() {
       return reply.code(400).send({ error: 'Invalid input', details: error.issues });
     if (error instanceof ReviewError)
       return reply.code(error.statusCode).send({ error: error.message });
-    const databaseError = error as { code?: string };
+    const databaseError = error as { code?: string; message?: string };
+    if (
+      databaseError.code === 'P0001' &&
+      databaseError.message?.startsWith('Remove reviewed route links before changing')
+    )
+      return reply.code(409).send({ error: databaseError.message });
     if (databaseError.code === '23514' || databaseError.code === '22P02')
       return reply.code(400).send({ error: 'The geometry or submitted values are invalid' });
     if (databaseError.code === '23503')

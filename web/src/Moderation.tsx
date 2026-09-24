@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, Check, ExternalLink, LockKeyhole, RefreshCw } from 'lucide-react';
-import type { Geometry, ProposalInput, ReviewInput } from '@opencoast/shared';
+import type { Geometry, ProposalInput, RecordFeature, ReviewInput } from '@opencoast/shared';
+import RouteManager from './RouteManager';
 import {
   API_URL,
   moderationProposal,
@@ -17,10 +18,12 @@ export default function Moderation({
   onBack,
   onFocus,
   onPublished,
+  routeArea,
 }: {
   onBack: () => void;
   onFocus: (geometry: Geometry) => void;
   onPublished: () => void;
+  routeArea: RecordFeature | null;
 }) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [email, setEmail] = useState('');
@@ -178,6 +181,10 @@ export default function Moderation({
           </p>
         )}
       </section>
+    );
+  if (routeArea)
+    return (
+      <RouteManager area={routeArea} onBack={onBack} onFocus={onFocus} onSaved={onPublished} />
     );
   return (
     <section className="moderation">

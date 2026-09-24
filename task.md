@@ -20,6 +20,7 @@ Build a public-source global coastal access map with accurate reviewed records, 
 - [x] Desktop and narrow viewport browser inspection; point, route, and area drawing verified in browser.
 - [x] Public GitHub repository and CI created; clean-checkout run is green.
 - [x] Follow-up work tracked as [GitHub issues](https://github.com/Ker102/opencoast/issues).
+- [x] Explicit area-to-route links, current derived land-route status, moderator controls, and audit revisions implemented (issue #2).
 - [ ] Real iOS Safari and Android Chrome touch testing.
 - [ ] Hosted Supabase, R2, Cloud Run, and Vercel credentials and deployment.
 - [ ] First Montenegro records checked by two moderators.
