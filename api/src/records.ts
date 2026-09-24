@@ -16,6 +16,7 @@ export interface RecordRow {
   allowed_activities: string[];
   conditions: string;
   land_route_status: PublicRecord['landRouteStatus'];
+  linked_route_ids: string[];
   sources: PublicRecord['sources'];
   observed_at: string | null;
   evidence_level: PublicRecord['evidenceLevel'];
@@ -26,7 +27,19 @@ export interface RecordRow {
 }
 
 export const recordSelect = `id, revision, kind, ST_AsGeoJSON(geometry)::json AS geometry, title, summary, description,
-  jurisdiction, local_category, access_status, allowed_activities, conditions, land_route_status,
+  jurisdiction, local_category, access_status, allowed_activities, conditions,
+  CASE WHEN access_records.kind='area' THEN
+    CASE WHEN EXISTS (
+      SELECT 1 FROM access_route_links l JOIN access_records route ON route.id=l.route_id
+      WHERE l.area_id=access_records.id AND route.visible AND route.kind='route'
+      AND route.evidence_level='document_backed' AND route.access_status IN ('allowed','conditional')
+    ) THEN 'verified' ELSE 'not_verified' END
+    ELSE access_records.land_route_status END AS land_route_status,
+  COALESCE((
+    SELECT jsonb_agg(l.route_id ORDER BY l.route_id) FROM access_route_links l
+    JOIN access_records route ON route.id=l.route_id
+    WHERE l.area_id=access_records.id AND route.visible AND route.kind='route'
+  ), '[]'::jsonb) AS linked_route_ids,
   sources, observed_at, evidence_level, geometry_precision, moderator_explanation, last_edited_at, last_reviewed_at`;
 
 export function featureFromRow(row: RecordRow): RecordFeature {
@@ -46,6 +59,7 @@ export function featureFromRow(row: RecordRow): RecordFeature {
       allowedActivities: row.allowed_activities,
       conditions: row.conditions,
       landRouteStatus: row.land_route_status,
+      linkedRouteIds: row.linked_route_ids,
       sources: row.sources,
       ...(row.observed_at ? { observedAt: row.observed_at } : {}),
       evidenceLevel: row.evidence_level,

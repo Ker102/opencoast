@@ -265,4 +265,160 @@ suite('moderated coastal information flow', () => {
     expect(current.json().properties.lastReviewedAt).toBeTruthy();
     expect((await app.inject(`/records/${recordId}/history`)).json().revisions).toHaveLength(2);
   });
+
+  it('links reviewed approach routes to areas with a live status and audit trail', async () => {
+    const login = await app.inject({
+      method: 'POST',
+      url: '/moderation/login',
+      headers: { origin },
+      payload: { email, password },
+    });
+    expect(login.statusCode).toBe(200);
+    const moderatorCookie = String(login.headers['set-cookie']).split(';')[0];
+    const source = {
+      title: 'Test route notice',
+      url: 'https://example.org/test-route-notice',
+      kind: 'official',
+    };
+    const area = {
+      ...base,
+      kind: 'area',
+      geometry: {
+        type: 'Polygon',
+        coordinates: [
+          [
+            [18.898, 42.199],
+            [18.902, 42.199],
+            [18.902, 42.202],
+            [18.898, 42.202],
+            [18.898, 42.199],
+          ],
+        ],
+      },
+      title: `Integration area ${marker}`,
+    };
+    const route = {
+      ...base,
+      kind: 'route',
+      geometry: {
+        type: 'LineString',
+        coordinates: [
+          [18.899, 42.198],
+          [18.9, 42.2],
+        ],
+      },
+      title: `Integration route ${marker}`,
+      accessStatus: 'allowed',
+      sources: [source],
+    };
+    const publish = async (
+      proposal: object,
+      evidenceLevel: 'community_reviewed' | 'document_backed',
+    ) => {
+      const created = await app.inject({
+        method: 'POST',
+        url: '/proposals',
+        remoteAddress: '127.0.0.2',
+        payload: proposal,
+      });
+      expect(created.statusCode).toBe(201);
+      const approved = await app.inject({
+        method: 'POST',
+        url: `/moderation/proposals/${created.json().id}/review`,
+        headers: { cookie: moderatorCookie, origin },
+        payload: {
+          action: 'approve',
+          explanation: 'Integration review with a separate route and area.',
+          evidenceLevel,
+          reviewedSources: evidenceLevel === 'document_backed',
+        },
+      });
+      expect(approved.statusCode).toBe(200);
+      return approved.json().recordId as string;
+    };
+    const areaId = await publish(area, 'community_reviewed');
+    const routeId = await publish(route, 'document_backed');
+    const initial = (await app.inject(`/records/${areaId}`)).json();
+    expect(initial.properties.landRouteStatus).toBe('not_verified');
+    expect(initial.properties.linkedRouteIds).toEqual([]);
+    expect((await app.inject(`/records/${areaId}/routes`)).json().routes).toEqual([]);
+
+    const linkRequest = {
+      routeIds: [routeId],
+      reason: 'Reviewed the approach route and area together.',
+    };
+    expect(
+      (
+        await app.inject({
+          method: 'PUT',
+          url: `/moderation/records/${areaId}/routes`,
+          headers: { origin },
+          payload: linkRequest,
+        })
+      ).statusCode,
+    ).toBe(401);
+    expect(
+      (
+        await app.inject({
+          method: 'PUT',
+          url: `/moderation/records/${areaId}/routes`,
+          headers: { cookie: moderatorCookie, origin: 'https://other.example' },
+          payload: linkRequest,
+        })
+      ).statusCode,
+    ).toBe(403);
+    const candidates = await app.inject({
+      url: `/moderation/records/${areaId}/route-candidates`,
+      headers: { cookie: moderatorCookie },
+    });
+    expect(candidates.statusCode).toBe(200);
+    expect(
+      candidates.json().routes.some((candidate: { id: string }) => candidate.id === routeId),
+    ).toBe(true);
+    const duplicate = await app.inject({
+      method: 'PUT',
+      url: `/moderation/records/${areaId}/routes`,
+      headers: { cookie: moderatorCookie, origin },
+      payload: { routeIds: [routeId, routeId], reason: linkRequest.reason },
+    });
+    expect(duplicate.statusCode).toBe(400);
+    const linked = await app.inject({
+      method: 'PUT',
+      url: `/moderation/records/${areaId}/routes`,
+      headers: { cookie: moderatorCookie, origin },
+      payload: linkRequest,
+    });
+    expect(linked.statusCode).toBe(200);
+    const linkedArea = (await app.inject(`/records/${areaId}`)).json();
+    expect(linkedArea.properties.landRouteStatus).toBe('verified');
+    expect(linkedArea.properties.linkedRouteIds).toEqual([routeId]);
+    expect(linkedArea.properties.revision).toBe(2);
+    const publicRoutes = (await app.inject(`/records/${areaId}/routes`)).json().routes;
+    expect(publicRoutes.map((item: { properties: { id: string } }) => item.properties.id)).toEqual([
+      routeId,
+    ]);
+    expect((await app.inject(`/records/${areaId}/history`)).json().revisions).toHaveLength(2);
+
+    await publish(
+      { ...route, targetRecordId: routeId, accessStatus: 'restricted' },
+      'document_backed',
+    );
+    const restricted = (await app.inject(`/records/${areaId}`)).json();
+    expect(restricted.properties.landRouteStatus).toBe('not_verified');
+    expect(restricted.properties.linkedRouteIds).toEqual([routeId]);
+    const unlinked = await app.inject({
+      method: 'PUT',
+      url: `/moderation/records/${areaId}/routes`,
+      headers: { cookie: moderatorCookie, origin },
+      payload: { routeIds: [], reason: 'The reviewed route no longer supports this area.' },
+    });
+    expect(unlinked.statusCode).toBe(200);
+    expect((await app.inject(`/records/${areaId}`)).json().properties.linkedRouteIds).toEqual([]);
+    expect((await app.inject(`/records/${areaId}/history`)).json().revisions).toHaveLength(3);
+    const events = await pool.query<{ before_route_ids: string[]; after_route_ids: string[] }>(
+      'SELECT before_route_ids,after_route_ids FROM route_link_events WHERE area_id=$1 ORDER BY created_at,id',
+      [areaId],
+    );
+    expect(events.rows.map((event) => event.after_route_ids)).toEqual([[routeId], []]);
+  });
 });

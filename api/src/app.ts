@@ -5,7 +5,7 @@ import multipart from '@fastify/multipart';
 import rateLimit from '@fastify/rate-limit';
 import { fileTypeFromBuffer } from 'file-type';
 import { z } from 'zod';
-import { proposalInputSchema, reviewInputSchema } from '@opencoast/shared';
+import { proposalInputSchema, reviewInputSchema, routeLinkInputSchema } from '@opencoast/shared';
 import { config } from './config.js';
 import { pool } from './db.js';
 import { hashToken, newToken, verifyPassword } from './security.js';
@@ -14,6 +14,7 @@ import { recordsInViewport, recordSelect, featureFromRow, type RecordRow } from 
 import { proposalData, proposalSelect, type ProposalRow } from './proposals.js';
 import { ReviewError, editProposal, reviewProposal } from './review.js';
 import { getObject, putObject, storageReady } from './storage.js';
+import { replaceRouteLinks, routeCandidates } from './route-links.js';
 
 const uuid = z.uuid();
 const idParams = z.object({ id: uuid });
@@ -102,6 +103,23 @@ export async function createApp() {
     );
     if (!result.rows[0]) return reply.code(404).send({ error: 'Record not found' });
     return featureFromRow(result.rows[0]);
+  });
+
+  app.get('/records/:id/routes', async (request, reply) => {
+    const { id } = idParams.parse(request.params);
+    const area = await pool.query(
+      'SELECT 1 FROM access_records WHERE id=$1 AND kind=$2 AND visible',
+      [id, 'area'],
+    );
+    if (!area.rowCount) return reply.code(404).send({ error: 'Area not found' });
+    const routes = await pool.query<RecordRow>(
+      `SELECT ${recordSelect} FROM access_records
+       JOIN access_route_links l ON l.route_id=access_records.id
+       WHERE l.area_id=$1 AND access_records.visible AND access_records.kind='route'
+       ORDER BY access_records.title,access_records.id`,
+      [id],
+    );
+    return { routes: routes.rows.map(featureFromRow) };
   });
 
   app.get('/records/:id/history', async (request) => {
@@ -451,6 +469,20 @@ export async function createApp() {
       .object({ proposal: proposalInputSchema, reason: z.string().trim().min(10).max(1000) })
       .parse(request.body);
     return editProposal(id, moderator, body.proposal, body.reason);
+  });
+
+  app.get('/moderation/records/:id/route-candidates', async (request) => {
+    await requireModerator(request);
+    const { id } = idParams.parse(request.params);
+    return routeCandidates(id);
+  });
+
+  app.put('/moderation/records/:id/routes', async (request) => {
+    if (!validMutationOrigin(request)) throw new ReviewError('Invalid request origin', 403);
+    const moderator = await requireModerator(request);
+    const { id } = idParams.parse(request.params);
+    const input = routeLinkInputSchema.parse(request.body);
+    return replaceRouteLinks(id, moderator, input);
   });
 
   return app;

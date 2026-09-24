@@ -95,9 +95,24 @@ export const reviewInputSchema = z
       });
   });
 
+export const routeLinkInputSchema = z
+  .object({
+    routeIds: z.array(z.uuid()).max(20),
+    reason: z.string().trim().min(10).max(1000),
+  })
+  .superRefine((value, context) => {
+    if (new Set(value.routeIds).size !== value.routeIds.length)
+      context.addIssue({
+        code: 'custom',
+        path: ['routeIds'],
+        message: 'Select each route only once',
+      });
+  });
+
 export type Geometry = z.infer<typeof geometrySchema>;
 export type ProposalInput = z.infer<typeof proposalInputSchema>;
 export type ReviewInput = z.infer<typeof reviewInputSchema>;
+export type RouteLinkInput = z.infer<typeof routeLinkInputSchema>;
 export type Source = z.infer<typeof sourceSchema>;
 export type AccessStatus = z.infer<typeof accessStatusSchema>;
 export type EvidenceLevel = z.infer<typeof evidenceLevelSchema>;
@@ -105,6 +120,7 @@ export type EvidenceLevel = z.infer<typeof evidenceLevelSchema>;
 export interface PublicRecord extends ProposalInput {
   id: string;
   revision: number;
+  linkedRouteIds: string[];
   evidenceLevel: EvidenceLevel;
   moderatorExplanation: string;
   lastEditedAt: string;
