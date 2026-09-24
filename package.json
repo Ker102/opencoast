@@ -8,7 +8,9 @@
     "web"
   ],
   "scripts": {
+    "predev": "npm run build -w shared",
     "dev": "concurrently -k -n api,web -c cyan,green \"npm run dev -w api\" \"npm run dev -w web\"",
+    "pretest": "npm run build -w shared",
     "test": "vitest run",
     "format": "prettier --write \"{web,api,shared}/src/**/*.{ts,tsx,css}\"",
     "format:check": "prettier --check \"{web,api,shared}/src/**/*.{ts,tsx,css}\"",
