@@ -6,7 +6,7 @@ The code is public and accepts technical contributions. The live database and pr
 
 ## What works now
 
-- Responsive global map using MapLibre and an OpenStreetMap-derived OpenFreeMap style, with visible attribution.
+- Responsive global map using MapLibre and an OpenStreetMap-derived OpenFreeMap style, with visible attribution. A focus view mutes the base colors and adds Mapterhorn hillshade while keeping reviewed access records vivid.
 - Reviewed areas, routes, and points with access status, evidence label, local category, conditions, sources, and separate edit and source-review dates.
 - Explicit moderator-reviewed links from an access area to separately reviewed approach routes. The area shows a verified land route only while a linked route remains visible, document backed, and allowed or conditional.
 - Desktop and touch-friendly drawing with vertex editing, undo, geometry review, and an anonymous submission form.
@@ -55,13 +55,14 @@ Set `DATABASE_URL=postgres://opencoast:opencoast_local@localhost:54329/opencoast
 
 ## Hosted deployment
 
-The intended setup is Supabase PostgreSQL with PostGIS, a **private** Cloudflare R2 bucket, the API on Google Cloud Run from the root `Dockerfile`, and the web app on Vercel from the repository root. `vercel.ts` proxies `/api/*` to Cloud Run so moderator cookies remain first-party. Set `CLOUD_RUN_API_ORIGIN` on Vercel before building. Do not expose the database or R2 credentials to the web build.
+The first hosted deployment uses dedicated [web](https://opencoast-web.vercel.app) and [API](https://opencoast-api.vercel.app/health) Vercel projects, Supabase PostgreSQL with PostGIS, and a **private** Cloudflare R2 bucket. Set each Vercel project's root directory to `web` or `api`. The web project's `web/vercel.ts` proxies `/api/*` to the API project so moderator cookies remain first-party. Set `VERCEL_API_ORIGIN` on the web project to the API HTTPS origin. Do not expose database or R2 credentials to the web build.
 
 API environment:
 
 | Variable | Purpose |
 | --- | --- |
-| `DATABASE_URL` | Supabase Postgres connection string with PostGIS enabled |
+| `DATABASE_URL` | Supabase transaction pooler connection string with PostGIS enabled |
+| `DATABASE_SSL_CA_B64` | Base64-encoded Supabase root CA certificate for verified TLS |
 | `WEB_ORIGIN` | Exact public web origin for CORS and moderator mutation checks |
 | `S3_ENDPOINT` | Cloudflare R2 account endpoint |
 | `S3_REGION` | R2 region, normally `auto` |
@@ -69,12 +70,12 @@ API environment:
 | `S3_BUCKET` | Private evidence bucket name |
 | `COOKIE_SECURE` | Defaults to secure in production |
 
-Run `api/db/*.sql` in filename order against the database before starting the API, or run `npm run db:migrate -w api` in a trusted environment with `DATABASE_URL`. Keep R2 private: raw uploads never get a public object URL. Create moderator accounts using `MODERATOR_BOOTSTRAP_PASSWORD` as a temporary secret, then remove it.
+Run `api/db/*.sql` in filename order against the database before starting the API, or run `npm run db:migrate -w api` in a trusted environment with `DATABASE_URL`. Keep R2 private: raw uploads never get a public object URL. Configure R2 CORS for the exact web origin and `PUT` with `Content-Type` (an example is in `infra/r2-cors.json`). Hosted evidence uploads use short-lived signed PUT URLs, then the API validates the stored file before copying it into a private final key. Create moderator accounts using `MODERATOR_BOOTSTRAP_PASSWORD` as a temporary secret, then remove it.
 
 The public basemap URL can be replaced with `VITE_MAP_STYLE_URL`. OpenFreeMap is suitable for early development but has no service guarantee; arrange monitoring and a funded tile provider before wide promotion. The map currently accepts coordinate navigation (`latitude, longitude`) rather than place-name search.
 
 ## Current release limits
 
-This is an initial working implementation, not a legal authority. No jurisdiction-wide law is automatically applied to beaches. Hand-drawn shapes are labeled approximate. A route is never inferred from proximity; a moderator must link it after checking geometry and sources. File scanning, durable abuse controls across API replicas, accessibility audits, and real iOS Safari/Android Chrome touch checks are release gates before broad public use. No hosted account or domain has been connected yet.
+This is an initial working implementation, not a legal authority. No jurisdiction-wide law is automatically applied to beaches. Hand-drawn shapes are labeled approximate. A route is never inferred from proximity; a moderator must link it after checking geometry and sources. File scanning, durable abuse controls across API replicas, accessibility audits, and real iOS Safari/Android Chrome touch checks are release gates before broad public use. The hosted database begins with zero asserted legal records.
 
 Code is MIT licensed; approved record data and third-party sources have separate rights. See [CONTRIBUTING.md](CONTRIBUTING.md) for code changes and map submissions.

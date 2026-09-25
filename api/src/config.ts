@@ -9,7 +9,7 @@ export const config = {
     process.env.DATABASE_URL ?? 'postgres://opencoast:opencoast_local@localhost:54329/opencoast',
   port: Number(
     process.env.NODE_ENV === 'production'
-      ? (process.env.PORT ?? 8080)
+      ? (process.env.PORT ?? (process.env.VERCEL ? 3000 : 8080))
       : (process.env.API_PORT ?? 4000),
   ),
   webOrigin: process.env.WEB_ORIGIN ?? 'http://localhost:5173',

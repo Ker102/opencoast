@@ -7,7 +7,7 @@ Build a public-source global coastal access map with accurate reviewed records, 
 ## Decisions
 
 - Code public on GitHub; operator controls live database and decides data licensing separately.
-- Supabase PostGIS for hosted data, Cloudflare R2 for private objects, Google Cloud Run API, Vercel web app with same-origin API proxy.
+- Supabase PostGIS for hosted data, Cloudflare R2 for private objects, separate Vercel API and web projects with a same-origin API proxy.
 - OpenFreeMap basemap with OpenStreetMap attribution, replaceable before high traffic.
 - No account needed for browsing or submitting; moderators have accounts.
 - Areas, routes, and points are separate; status and evidence label are separate.
@@ -21,8 +21,11 @@ Build a public-source global coastal access map with accurate reviewed records, 
 - [x] Public GitHub repository and CI created; clean-checkout run is green.
 - [x] Follow-up work tracked as [GitHub issues](https://github.com/Ker102/opencoast/issues).
 - [x] Explicit area-to-route links, current derived land-route status, moderator controls, and audit revisions implemented (issue #2).
+- [x] Terrain focus view implemented with muted base colors, preserved community overlays, and a mobile map switch.
+- [x] Dedicated Supabase PostGIS project, private R2 bucket, and two Vercel projects configured; hosted health, empty map, and same-origin proxy respond successfully.
+- [x] Hosted anonymous submission, private evidence upload, receipt, and first moderator sign-in flow verified; temporary test data removed.
 - [ ] Real iOS Safari and Android Chrome touch testing.
-- [ ] Hosted Supabase, R2, Cloud Run, and Vercel credentials and deployment.
+- [ ] Disable Supabase Data API in the dashboard; direct PostgreSQL table grants already block the checked API roles.
 - [ ] First Montenegro records checked by two moderators.
 
 ## Validation before broad promotion

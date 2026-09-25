@@ -5,7 +5,11 @@ import multipart from '@fastify/multipart';
 import rateLimit from '@fastify/rate-limit';
 import { fileTypeFromBuffer } from 'file-type';
 import { z } from 'zod';
-import { proposalInputSchema, reviewInputSchema, routeLinkInputSchema } from '@opencoast/shared';
+import {
+  proposalInputSchema,
+  reviewInputSchema,
+  routeLinkInputSchema,
+} from '../../shared/dist/index.js';
 import { config } from './config.js';
 import { pool } from './db.js';
 import { hashToken, newToken, verifyPassword } from './security.js';
@@ -13,12 +17,14 @@ import { moderatorId, validMutationOrigin } from './auth.js';
 import { recordsInViewport, recordSelect, featureFromRow, type RecordRow } from './records.js';
 import { proposalData, proposalSelect, type ProposalRow } from './proposals.js';
 import { ReviewError, editProposal, reviewProposal } from './review.js';
-import { getObject, putObject, storageReady } from './storage.js';
+import { getObject, putObject, remoteStorageReady, signedGetUrl, storageReady } from './storage.js';
 import { replaceRouteLinks, routeCandidates } from './route-links.js';
+import { completeEvidenceUpload, createEvidenceUploadIntent } from './evidence-upload.js';
 
 const uuid = z.uuid();
 const idParams = z.object({ id: uuid });
 const evidenceParams = z.object({ id: uuid, evidenceId: uuid });
+const uploadParams = z.object({ id: uuid, uploadId: uuid });
 
 function receiptHash(request: FastifyRequest): string | null {
   const token = request.headers['x-receipt-token'];
@@ -43,16 +49,19 @@ async function requireModerator(request: FastifyRequest): Promise<string> {
   return id;
 }
 
-export async function createApp() {
-  const app = Fastify({ logger: process.env.NODE_ENV !== 'test', bodyLimit: 1_000_000 });
-  await app.register(cookie);
-  await app.register(cors, {
+export function fastifyOptions() {
+  return { logger: process.env.NODE_ENV !== 'test', bodyLimit: 1_000_000 };
+}
+
+export function createApp(app = Fastify(fastifyOptions())) {
+  app.register(cookie);
+  app.register(cors, {
     origin: config.webOrigin,
     credentials: true,
     methods: ['GET', 'HEAD', 'POST', 'PUT'],
   });
-  await app.register(rateLimit, { global: false });
-  await app.register(multipart, { limits: { fileSize: 10_485_760, files: 1, fields: 0 } });
+  app.register(rateLimit, { global: false });
+  app.register(multipart, { limits: { fileSize: 10_485_760, files: 1, fields: 0 } });
 
   app.addHook('onSend', async (request, reply, payload) => {
     if (request.url.startsWith('/proposals') || request.url.startsWith('/moderation/'))
@@ -173,6 +182,10 @@ export async function createApp() {
       [id, evidenceId],
     );
     if (!result.rows[0]) return reply.code(404).send({ error: 'Evidence not found' });
+    if (!config.localEvidenceDir)
+      return reply
+        .header('Cache-Control', 'private,no-store')
+        .redirect(await signedGetUrl(result.rows[0].public_key));
     const object = await getObject(result.rows[0].public_key);
     return reply
       .header('Content-Type', 'image/jpeg')
@@ -256,6 +269,40 @@ export async function createApp() {
       );
       await pool.query(`UPDATE proposals SET status='pending',updated_at=now() WHERE id=$1`, [id]);
       return reply.code(201).send({ ok: true });
+    },
+  );
+
+  app.post(
+    '/proposals/:id/evidence-uploads',
+    { config: { rateLimit: { max: 10, timeWindow: '1 hour' } } },
+    async (request, reply) => {
+      const { id } = idParams.parse(request.params);
+      const proposal = await receiptProposal(request, id);
+      if (!proposal) return reply.code(404).send({ error: 'Receipt not found' });
+      if (!remoteStorageReady() || config.localEvidenceDir)
+        throw new ReviewError('Direct evidence storage is not configured', 503);
+      const input = z
+        .object({
+          name: z.string().trim().min(1).max(200),
+          contentType: z.enum(['image/jpeg', 'image/png', 'image/webp', 'application/pdf']),
+          byteSize: z.number().int().min(1).max(10_485_760),
+          publishConsent: z.boolean().default(false),
+        })
+        .parse(request.body);
+      return reply.code(201).send(await createEvidenceUploadIntent(id, input));
+    },
+  );
+
+  app.post(
+    '/proposals/:id/evidence-uploads/:uploadId/complete',
+    { config: { rateLimit: { max: 20, timeWindow: '1 hour' } } },
+    async (request, reply) => {
+      const { id, uploadId } = uploadParams.parse(request.params);
+      const proposal = await receiptProposal(request, id);
+      if (!proposal) return reply.code(404).send({ error: 'Receipt not found' });
+      if (!remoteStorageReady() || config.localEvidenceDir)
+        throw new ReviewError('Direct evidence storage is not configured', 503);
+      return reply.code(201).send(await completeEvidenceUpload(id, uploadId));
     },
   );
 
@@ -450,6 +497,10 @@ export async function createApp() {
       [id, evidenceId],
     );
     if (!result.rows[0]) return reply.code(404).send({ error: 'Evidence not found' });
+    if (!config.localEvidenceDir)
+      return reply
+        .header('Cache-Control', 'private,no-store')
+        .redirect(await signedGetUrl(result.rows[0].private_key));
     const object = await getObject(result.rows[0].private_key);
     return reply
       .header('Content-Type', result.rows[0].content_type)

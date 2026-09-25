@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { randomUUID } from 'node:crypto';
 import sharp from 'sharp';
-import { createApp } from './app.js';
+import { createApp } from './fastify-app.js';
 import { pool } from './db.js';
 import { passwordHash } from './security.js';
 

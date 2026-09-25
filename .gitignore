@@ -2,8 +2,11 @@ node_modules/
 dist/
 coverage/
 .env
+.env.local
 .env.*.local
 .vite/
+.vercel/
+supabase/.temp/
 playwright-report/
 test-results/
 *.log

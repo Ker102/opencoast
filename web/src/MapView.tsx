@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Layers3, Mountain } from 'lucide-react';
 import * as maplibregl from 'maplibre-gl';
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
@@ -16,6 +17,7 @@ import {
   type ProposalInput,
   type RecordCollection,
 } from '@opencoast/shared';
+import { captureFocusPaint, setFocusMapStyle } from './focus-map-style';
 
 const styleUrl =
   import.meta.env.VITE_MAP_STYLE_URL ?? 'https://tiles.openfreemap.org/styles/liberty';
@@ -71,8 +73,12 @@ export default function MapView({
   const callbacks = useRef({ onViewport, onSelectRecord, onGeometry, onDrawReady });
   const drawingRef = useRef(drawingKind);
   const [mapError, setMapError] = useState(false);
+  const [focusView, setFocusView] = useState(false);
+  const focusPaintRef = useRef<ReturnType<typeof captureFocusPaint>>([]);
+  const focusViewRef = useRef(focusView);
   callbacks.current = { onViewport, onSelectRecord, onGeometry, onDrawReady };
   drawingRef.current = drawingKind;
+  focusViewRef.current = focusView;
 
   useEffect(() => {
     if (!container.current) return;
@@ -108,6 +114,8 @@ export default function MapView({
     map.on('moveend', refresh);
     map.on('error', () => setMapError(true));
     map.on('load', () => {
+      focusPaintRef.current = captureFocusPaint(map);
+      if (focusViewRef.current) setFocusMapStyle(map, focusPaintRef.current, true);
       map.addSource('access-records', { type: 'geojson', data: empty });
       const statusColor: maplibregl.ExpressionSpecification = [
         'match',
@@ -301,6 +309,12 @@ export default function MapView({
 
   useEffect(() => {
     const map = mapRef.current;
+    if (map && focusPaintRef.current.length)
+      setFocusMapStyle(map, focusPaintRef.current, focusView);
+  }, [focusView]);
+
+  useEffect(() => {
+    const map = mapRef.current;
     if (map?.isStyleLoaded() && map.getSource('access-records'))
       (map.getSource('access-records') as maplibregl.GeoJSONSource).setData(records as never);
   }, [records]);
@@ -351,6 +365,17 @@ export default function MapView({
         role="application"
         aria-label="Interactive coastal access map"
       />
+      <button
+        type="button"
+        className={`map-view-toggle${focusView ? ' is-active' : ''}`}
+        aria-label={focusView ? 'Show standard map view' : 'Show terrain focus map view'}
+        aria-pressed={focusView}
+        title={focusView ? 'Standard map view' : 'Terrain focus view'}
+        onClick={() => setFocusView((current) => !current)}
+      >
+        {focusView ? <Layers3 size={17} /> : <Mountain size={17} />}
+        <span>{focusView ? 'Standard view' : 'Focus view'}</span>
+      </button>
       {mapError && (
         <div className="map-error" role="status">
           Map tiles could not load. Your submissions and records remain available in the side panel.

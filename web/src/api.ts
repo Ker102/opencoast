@@ -68,6 +68,34 @@ export async function uploadEvidence(
   file: File,
   publishConsent: boolean,
 ) {
+  if (file.size < 1 || file.size > 10_485_760) throw new Error('File must be 1 byte to 10 MB');
+  if (!['image/jpeg', 'image/png', 'image/webp', 'application/pdf'].includes(file.type))
+    throw new Error('Choose a JPEG, PNG, WebP, or PDF file');
+  if (import.meta.env.PROD) {
+    const intent = await json<{ uploadId: string; uploadUrl: string }>(
+      `/proposals/${id}/evidence-uploads`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-receipt-token': token },
+        body: JSON.stringify({
+          name: file.name,
+          contentType: file.type,
+          byteSize: file.size,
+          publishConsent,
+        }),
+      },
+    );
+    const transfer = await fetch(intent.uploadUrl, {
+      method: 'PUT',
+      headers: { 'Content-Type': file.type },
+      body: file,
+    });
+    if (!transfer.ok) throw new Error('Could not transfer the file to private evidence storage');
+    return json<{ id: string; name: string }>(
+      `/proposals/${id}/evidence-uploads/${intent.uploadId}/complete`,
+      { method: 'POST', headers: { 'x-receipt-token': token } },
+    );
+  }
   const form = new FormData();
   form.append('file', file);
   return json<{ id: string; name: string }>(
