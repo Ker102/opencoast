@@ -1,6 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import '@fontsource-variable/dm-sans/wght.css';
+import '@fontsource-variable/manrope/wght.css';
+import '@fontsource-variable/space-grotesk/wght.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './styles.css';
 

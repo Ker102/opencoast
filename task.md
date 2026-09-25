@@ -22,6 +22,7 @@ Build a public-source global coastal access map with accurate reviewed records, 
 - [x] Follow-up work tracked as [GitHub issues](https://github.com/Ker102/opencoast/issues).
 - [x] Explicit area-to-route links, current derived land-route status, moderator controls, and audit revisions implemented (issue #2).
 - [x] Terrain focus view implemented with muted base colors, preserved community overlays, and a mobile map switch.
+- [x] Focus view park fills and outlines neutralized so they cannot resemble reviewed access areas; shoreline logo, wordmark, and locally hosted fonts added.
 - [x] Dedicated Supabase PostGIS project, private R2 bucket, and two Vercel projects configured; hosted health, empty map, and same-origin proxy respond successfully.
 - [x] Hosted anonymous submission, private evidence upload, receipt, and first moderator sign-in flow verified; temporary test data removed.
 - [ ] Real iOS Safari and Android Chrome touch testing.

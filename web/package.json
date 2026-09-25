@@ -3,8 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": {"dev": "vite --host 0.0.0.0", "build": "tsc -p tsconfig.json && vite build", "preview": "vite preview --host 0.0.0.0"},
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -p tsconfig.json && vite build",
+    "preview": "vite preview --host 0.0.0.0"
+  },
   "dependencies": {
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@fontsource-variable/space-grotesk": "^5.3.0",
     "@opencoast/shared": "0.1.0",
     "lucide-react": "^1.48.0",
     "maplibre-gl": "^6.11.2",
@@ -13,5 +20,10 @@
     "terra-draw": "^1.35.0",
     "terra-draw-maplibre-gl-adapter": "^1.4.1"
   },
-  "devDependencies": {"@types/react": "^19.0.0", "@types/react-dom": "^19.0.0", "@vitejs/plugin-react": "^6.1.1", "vite": "^8.3.1"}
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "vite": "^8.3.1"
+  }
 }

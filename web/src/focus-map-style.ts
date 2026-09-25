@@ -15,10 +15,10 @@ function baseColor(id: string, type: string): string | null {
   if (type === 'fill-extrusion') return '#d5dcda';
   if (type === 'fill') {
     if (id === 'water') return '#c9dee1';
-    if (id === 'landcover_sand') return '#e6e2d7';
-    if (/park|wood|grass|wetland|cemetery/.test(id)) return '#e1e7e1';
-    if (id === 'building') return '#d9dfdc';
-    return '#e9edeb';
+    if (id === 'landcover_sand') return '#e7e5df';
+    if (/park|wood|grass|wetland|cemetery/.test(id)) return '#e7e9e8';
+    if (id === 'building') return '#d8dddc';
+    return '#eceeed';
   }
   if (type === 'line') {
     if (/waterway/.test(id)) return '#a3bec3';
@@ -49,6 +49,22 @@ export function captureFocusPaint(map: MapLibreMap): PaintChange[] {
               : 'text-color';
     if (property in paint) {
       changes.push({ layerId: layer.id, property, original: paint[property], focused: color });
+    }
+    if (layer.type === 'fill' && 'fill-outline-color' in paint) {
+      changes.push({
+        layerId: layer.id,
+        property: 'fill-outline-color',
+        original: paint['fill-outline-color'],
+        focused: '#cbd2d0',
+      });
+    }
+    if (layer.id === 'landcover_wetland' && 'fill-pattern' in paint) {
+      changes.push({
+        layerId: layer.id,
+        property: 'fill-opacity',
+        original: paint['fill-opacity'] ?? 1,
+        focused: 0.15,
+      });
     }
     const layout = layer.layout as Record<string, unknown> | undefined;
     if (layer.type === 'symbol' && layout && 'icon-image' in layout) {

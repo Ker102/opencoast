@@ -147,10 +147,13 @@ export default function App() {
       >
         <header className="brand-header">
           <button className="brand-button" onClick={backToMap} aria-label="OpenCoast home">
-            <span className="wordmark">
-              OPEN<span>COAST</span>
+            <img className="brand-mark" src="/favicon.svg" alt="" width="44" height="44" />
+            <span className="brand-copy">
+              <span className="wordmark">
+                Open<span>Coast</span>
+              </span>
+              <span className="brand-subtitle">People · Places · A more open coast</span>
             </span>
-            <span className="brand-subtitle">People · Places · A more open coast</span>
           </button>
           <button
             className="mobile-menu-button"
