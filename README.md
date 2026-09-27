@@ -1,81 +1,166 @@
-# OpenCoast
+<img src="web/public/favicon.svg" width="56" height="56" alt="OpenCoast shoreline logo">
 
-OpenCoast is a global map for reviewed information about coastal access. People can draw an area, route, or point and submit a claim without an account. A moderator checks the exact shape, wording, and evidence before it appears on the map. Unmarked places say **No reviewed access information yet**; an empty map never implies that access is forbidden.
+# OpenCoast — Open-source coastal access map
 
-The code is public and accepts technical contributions. The live database and private evidence store are controlled by the project operator. Approved map records do **not** have an open-data license yet; ask before redistributing them. The OpenStreetMap-derived basemap retains its own attribution and license.
+**Beach access rights, routes to shore, and the evidence behind them.**
+
+OpenCoast is an open-source web app for mapping community-reviewed information about **public beach access and coastal access rights**. People can draw coastal areas, paths to the shore, and access points; add descriptions, local conditions, and sources; and submit them anonymously. Moderators review each proposal before it appears on the public map.
+
+[Explore the map](https://opencoast-web.vercel.app/) · [Contribute](CONTRIBUTING.md) · [How review works](docs/moderation-policy.md) · [Development guide](docs/development.md) · [Roadmap](https://github.com/Ker102/opencoast/issues)
+
+[![CI](https://github.com/Ker102/opencoast/actions/workflows/ci.yml/badge.svg)](https://github.com/Ker102/opencoast/actions/workflows/ci.yml) · [Code license: MIT](LICENSE)
+
+> **Early-stage project.** The map supports worldwide navigation and submissions; reviewed information grows place by place. An unmarked coast means **no reviewed access information yet**. It never means that access is forbidden or guaranteed.
+
+## Why OpenCoast exists
+
+Finding a beach on a map leaves several questions unanswered: What access is permitted? What conditions apply? Is there a reviewed route to reach it? Which sources support that information, and when were they checked?
+
+OpenCoast brings those questions into one map. Each record ties a specific location to a description, jurisdiction, access status, evidence label, and review history. The project is useful to residents, coastal visitors, community mappers, source researchers, and developers building public-interest mapping tools.
+
+Created by **[Kristofer Jussmann (Ker102)](https://github.com/Ker102)**, OpenCoast began with concerns about coastal access in Montenegro. Its scope is global; the [first Montenegro records](https://github.com/Ker102/opencoast/issues/5) are a source-review effort, not a preloaded set of legal conclusions.
+
+## What can you map?
+
+| Record type        | What it describes                                   | Why it is separate                                                                     |
+| ------------------ | --------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| **Access area**    | A beach, foreshore, or other defined coastal area   | Conditions can apply to a particular area rather than an entire coastline.             |
+| **Route to shore** | A path, entrance route, or coastal way              | An area's access status does not establish permission to cross the land leading to it. |
+| **Access point**   | An entrance, gate, sign, or other relevant location | A precise point can explain where an access condition or observation applies.          |
+
+Records can include local categories, allowed activities, conditions, source links, and observations. A leased beach or concession can be described with its specific conditions and evidence; OpenCoast does not assume that one label determines every right at that location.
 
 ## What works now
 
-- Responsive global map using MapLibre and an OpenStreetMap-derived OpenFreeMap style, with visible attribution. A focus view mutes the base colors and adds Mapterhorn hillshade while keeping reviewed access records vivid.
-- Reviewed areas, routes, and points with access status, evidence label, local category, conditions, sources, and separate edit and source-review dates.
-- Explicit moderator-reviewed links from an access area to separately reviewed approach routes. The area shows a verified land route only while a linked route remains visible, document backed, and allowed or conditional.
-- Desktop and touch-friendly drawing with vertex editing, undo, geometry review, and an anonymous submission form.
-- Private receipt link, optional source link and file evidence, and a reply path when a moderator asks for clarification.
-- Moderator sign-in, queue, private evidence inspection, audited wording edits, approval, rejection, clarification, public revision history, and selected sanitized image publication.
-- A production PostGIS schema and a local PostGIS container. New databases have **zero asserted access records**.
+- **A responsive global map:** browse in a desktop or mobile browser, with an OpenStreetMap-derived basemap supplied by OpenFreeMap.
+- **A terrain Focus view:** neutral land colors and hillshade keep the coastline readable while reviewed access areas, routes, and points stand out.
+- **Precise drawing tools:** draw and edit points, lines, and polygons, adjust vertices, undo changes, and review geometry before submitting.
+- **Anonymous contributions:** submit information or corrections without creating an account. Save a private receipt link to follow the review and answer moderator questions.
+- **Evidence and dates:** records distinguish access status from evidence strength and show edit dates separately from source-review dates.
+- **Moderated publication:** moderators can request clarification, edit wording with an audit reason, approve or reject proposals, and inspect private evidence. Published records have revision histories.
+- **Reviewed area-to-route links:** moderators can link a coastal area to separate approach-route records. A verified land-route label depends on the linked route's current visibility, evidence, and access status.
 
-See [the design](docs/plans/2026-09-24-opencoast-design.md) and [moderation policy](docs/moderation-policy.md) for the current decisions. The generated images in `docs/design-reference` are visual references only; their fictitious beach claims are not data.
+## How to read coastal access information
 
-## Run locally
+### Access status
 
-Requirements: Node.js 24+, npm, and Docker. A local PostGIS database uses port `54329`; the API uses `4000`; the web app uses `5173`.
+| Status          | Meaning in OpenCoast                                                        |
+| --------------- | --------------------------------------------------------------------------- |
+| **Allowed**     | The reviewed claim describes access as permitted within the record's scope. |
+| **Conditional** | The record describes access subject to stated limits or conditions.         |
+| **Restricted**  | The record describes a restriction on access.                               |
+| **Disputed**    | The claim is contested or credible evidence conflicts.                      |
+| **Unknown**     | The available information does not establish the applicable access rule.    |
+
+Read the description and conditions alongside the status. An access label is a reviewed claim with a defined scope, not a guarantee for every activity or date.
+
+### Evidence strength
+
+**Document backed** means a moderator checked at least one linked official source against the claim and geometry. The explanation should identify what the source supports and any remaining uncertainty.
+
+**Community reviewed, no official source verified** means a moderator approved the information for display without verifying an official source. These records carry a visible label; they must not be read as legally verified access rights.
+
+Hand-drawn boundaries are labeled approximate. An edit date does not imply a new legal-source review. Read the [moderation policy](docs/moderation-policy.md) for the full review standard.
+
+## Contribute beach-access information
+
+1. **Find the location** in the [live map](https://opencoast-web.vercel.app/). Pan and zoom, or enter `latitude, longitude`; place-name search is [planned](https://github.com/Ker102/opencoast/issues/6).
+2. **Choose Add information** and draw an area, route, or point. Existing records also accept proposed corrections.
+3. **Describe the claim:** include the jurisdiction, local category where useful, conditions, and what you observed or read.
+4. **Add sources and evidence.** Official documents and direct links are strongly encouraged, but they are optional. Original uploads are private to moderators; only separately approved images with publication consent can appear publicly.
+5. **Save the private receipt link.** A moderator reviews the proposal and may ask for clarification before publication.
+
+Coastal access reports belong in the app's review workflow. Use GitHub issues for software bugs, documentation, and feature proposals. See the [contribution guide](CONTRIBUTING.md) for both paths.
+
+## Frequently asked questions
+
+### Is OpenCoast a worldwide database of legally verified public beaches?
+
+OpenCoast supports a worldwide map and contributions from different jurisdictions. Coverage depends on submitted and reviewed records, and some published records have no verified official source. It is an early-stage information project, not a complete legal database or legal authority.
+
+### Does a blank map mean a beach is private or closed?
+
+No. It means there is no reviewed access information displayed there. The basemap's parks, roads, beaches, and land colors are geographic context; they are not OpenCoast access claims.
+
+### Can I submit without an account or an official document?
+
+Yes. Public submissions do not require an account, and official sources are encouraged rather than mandatory. Every submission still requires moderator review. If an official source has not been verified, the published record says so.
+
+### How is a public beach connected to its access route?
+
+The beach area and route are reviewed as separate records. A moderator must explicitly link them after checking the geometry and sources. OpenCoast does not infer an access route because a nearby road or path appears to reach the beach.
+
+### Does submitting to OpenCoast edit OpenStreetMap?
+
+No. OpenCoast stores its reviewed access records in its own database. OpenFreeMap provides the OpenStreetMap-derived background map. Submissions here are not automatically written to OpenStreetMap.
+
+### Is the coastal access data open data?
+
+The software is open source under the MIT license. Approved records in the hosted database do not yet have an open-data license; obtain permission before redistributing them. Private evidence and third-party source material have separate rights. See [licensing and attribution](#licensing-and-attribution).
+
+### Can I use OpenCoast on my phone?
+
+Yes, through its responsive web interface. Drawing is designed for touch as well as desktop input. There is no native mobile app yet, and [real-device testing and accessibility review](https://github.com/Ker102/opencoast/issues/4) remain active work.
+
+## Help build OpenCoast
+
+Contributions are useful across several areas:
+
+- **Local knowledge and source research:** submit carefully scoped records and corrections through the map. Include relevant provisions, source dates, and uncertainty.
+- **Mapping and user experience:** improve drawing, navigation, readable legends, keyboard access, and touch interaction.
+- **Software and infrastructure:** help with geospatial queries, moderation tools, evidence handling, testing, and deployment reliability.
+- **Documentation:** improve explanations and developer onboarding. Translations and localization proposals are welcome.
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md), browse [open issues](https://github.com/Ker102/opencoast/issues), or [propose an improvement](https://github.com/Ker102/opencoast/issues/new/choose). Report security concerns through [private vulnerability reporting](https://github.com/Ker102/opencoast/security/advisories/new).
+
+## Technology and repository structure
+
+| Layer                | Implementation                                         | Location             |
+| -------------------- | ------------------------------------------------------ | -------------------- |
+| Web interface        | React, TypeScript, Vite, MapLibre GL JS, Terra Draw    | [`web/`](web/)       |
+| API and moderation   | Fastify, TypeScript, private evidence handling         | [`api/`](api/)       |
+| Data contracts       | Zod schemas and GeoJSON types                          | [`shared/`](shared/) |
+| Spatial storage      | PostgreSQL and PostGIS; hosted on Supabase             | [`api/db/`](api/db/) |
+| Hosting and evidence | Vercel web/API projects; private Cloudflare R2 storage | [`infra/`](infra/)   |
+
+### Run locally
+
+The current CI uses Node.js 24. Install Node.js 24+, npm, and Docker, then:
 
 ```sh
+git clone https://github.com/Ker102/opencoast.git
+cd opencoast
 npm ci
 docker compose up -d
 npm run db:migrate
 npm run dev
 ```
 
-Open `http://localhost:5173`. To create a local moderator, set `MODERATOR_BOOTSTRAP_PASSWORD` to a unique password of at least 12 characters and run:
+Open `http://localhost:5173`. Local databases start with zero asserted access records. The [development guide](docs/development.md#run-locally) covers environment settings, ports, local uploads, and creating a moderator account.
 
-```sh
-npm run moderator:create -w api -- moderator@example.org
-```
+### Checks
 
-The API loads environment values from the repository `.env` or `api/.env`; copy `.env.example` if you need to change the defaults. Local uploads are stored in ignored `.local-evidence/`. Production must configure Cloudflare R2 credentials and leave `LOCAL_EVIDENCE_DIR` unset.
+See [validation commands and the isolated database integration test](docs/development.md#checks).
 
-## Checks
+### Hosted deployment
 
-```sh
-npm test
-npm run format:check
-npm run typecheck
-npm run build
-npm audit --audit-level=high
-```
-
-The database integration test uses a separate `opencoast_test` database and clears only that database after running. Create it locally, run migrations against it, then run the test:
-
-```sh
-docker exec opencoast-postgis-1 createdb -U opencoast opencoast_test
-```
-
-Set `DATABASE_URL=postgres://opencoast:opencoast_local@localhost:54329/opencoast_test` for both the migration and `INTEGRATION_TEST=1 npx vitest run api/src/app.integration.test.ts`. The test refuses any other database name.
-
-## Hosted deployment
-
-The first hosted deployment uses dedicated [web](https://opencoast-web.vercel.app) and [API](https://opencoast-api.vercel.app/health) Vercel projects, Supabase PostgreSQL with PostGIS, and a **private** Cloudflare R2 bucket. Set each Vercel project's root directory to `web` or `api`. The web project's `web/vercel.ts` proxies `/api/*` to the API project so moderator cookies remain first-party. Set `VERCEL_API_ORIGIN` on the web project to the API HTTPS origin. Do not expose database or R2 credentials to the web build.
-
-API environment:
-
-| Variable | Purpose |
-| --- | --- |
-| `DATABASE_URL` | Supabase transaction pooler connection string with PostGIS enabled |
-| `DATABASE_SSL_CA_B64` | Base64-encoded Supabase root CA certificate for verified TLS |
-| `WEB_ORIGIN` | Exact public web origin for CORS and moderator mutation checks |
-| `S3_ENDPOINT` | Cloudflare R2 account endpoint |
-| `S3_REGION` | R2 region, normally `auto` |
-| `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | R2 credentials restricted to the evidence bucket |
-| `S3_BUCKET` | Private evidence bucket name |
-| `COOKIE_SECURE` | Defaults to secure in production |
-
-Run `api/db/*.sql` in filename order against the database before starting the API, or run `npm run db:migrate -w api` in a trusted environment with `DATABASE_URL`. Keep R2 private: raw uploads never get a public object URL. Configure R2 CORS for the exact web origin and `PUT` with `Content-Type` (an example is in `infra/r2-cors.json`). Hosted evidence uploads use short-lived signed PUT URLs, then the API validates the stored file before copying it into a private final key. Create moderator accounts using `MODERATOR_BOOTSTRAP_PASSWORD` as a temporary secret, then remove it.
-
-The public basemap URL can be replaced with `VITE_MAP_STYLE_URL`. OpenFreeMap is suitable for early development but has no service guarantee; arrange monitoring and a funded tile provider before wide promotion. The map currently accepts coordinate navigation (`latitude, longitude`) rather than place-name search.
+See [Vercel, Supabase/PostGIS, and private Cloudflare R2 configuration](docs/development.md#hosted-deployment).
 
 ## Current release limits
 
-This is an initial working implementation, not a legal authority. No jurisdiction-wide law is automatically applied to beaches. Hand-drawn shapes are labeled approximate. A route is never inferred from proximity; a moderator must link it after checking geometry and sources. File scanning, durable abuse controls across API replicas, accessibility audits, and real iOS Safari/Android Chrome touch checks are release gates before broad public use. The hosted database begins with zero asserted legal records.
+The current implementation supports reviewed publication, but several tasks remain before broad promotion: [upload and abuse-control hardening](https://github.com/Ker102/opencoast/issues/3), [real-device touch and accessibility testing](https://github.com/Ker102/opencoast/issues/4), [independent source review for the first Montenegro records](https://github.com/Ker102/opencoast/issues/5), and [place-name search](https://github.com/Ker102/opencoast/issues/6).
 
-Code is MIT licensed; approved record data and third-party sources have separate rights. See [CONTRIBUTING.md](CONTRIBUTING.md) for code changes and map submissions.
+No jurisdiction-wide law is automatically applied to beaches. A reported obstruction and a documented legal right are separate claims. OpenCoast's records explain the evidence reviewed; they do not replace the source documents or establish legal boundaries.
+
+See the [project design](docs/plans/2026-09-24-opencoast-design.md) and [progress tracker](task.md). Images in `docs/design-reference` are visual concepts with fictitious example claims; they are not map data.
+
+## Licensing and attribution
+
+- **Software:** [MIT](LICENSE), permitting use, modification, and redistribution under its terms.
+- **Hosted access records:** operator-controlled, with no open-data license yet. Discuss reuse with the [maintainer](https://github.com/Ker102).
+- **Evidence and source documents:** retain their own rights and publication restrictions. Uploaded originals are private.
+- **Basemap and terrain:** attribution to [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenFreeMap](https://openfreemap.org/), [OpenMapTiles](https://www.openmaptiles.org/), and [Mapterhorn](https://mapterhorn.com/attribution) remains visible in the map as applicable.
+
+For articles, research, or software reuse, link to [OpenCoast on GitHub](https://github.com/Ker102/opencoast) and use [CITATION.cff](CITATION.cff) for software citation details. Citing the software does not verify any particular coastal access claim.
+
+Project overview last reviewed: **2026-09-28**.
