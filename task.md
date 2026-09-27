@@ -19,6 +19,7 @@ Build a public-source global coastal access map with accurate reviewed records, 
 - [x] Database-backed integration flow passes in isolated test database; no legal records seeded.
 - [x] Desktop and narrow viewport browser inspection; point, route, and area drawing verified in browser.
 - [x] Public GitHub repository and CI created; clean-checkout run is green.
+- [x] GitHub discovery documentation expanded with a public-facing overview, evidence FAQ, contribution paths, and software citation metadata (issue #7).
 - [x] Follow-up work tracked as [GitHub issues](https://github.com/Ker102/opencoast/issues).
 - [x] Explicit area-to-route links, current derived land-route status, moderator controls, and audit revisions implemented (issue #2).
 - [x] Terrain focus view implemented with muted base colors, preserved community overlays, and a mobile map switch.

@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: >-
+  If you reference or use the OpenCoast software, you can use this citation.
+  This citation describes the software, not the legal validity or licensing
+  of any hosted coastal access record.
+type: software
+title: "OpenCoast: Open-source coastal access map"
+abstract: >-
+  OpenCoast is an open-source web application for community-reviewed coastal
+  access information. Contributors can anonymously propose beach and coastal
+  areas, routes to shore, and access points with descriptions, conditions,
+  and supporting sources. Moderators review proposals before publication.
+  Records distinguish access status from evidence strength and retain review
+  dates and revision history. The map supports global submissions; reviewed
+  coverage depends on community contributions. The software is MIT licensed;
+  hosted access records and private evidence have separate rights.
+authors:
+  - family-names: Jussmann
+    given-names: Kristofer
+    website: "https://github.com/Ker102"
+repository-code: "https://github.com/Ker102/opencoast"
+url: "https://opencoast-web.vercel.app/"
+license: MIT
+keywords:
+  - coastal access
+  - public beach access
+  - coastal access rights
+  - routes to shore
+  - community mapping
+  - civic technology
+  - geospatial
+  - OpenStreetMap
+  - MapLibre
+  - PostGIS
