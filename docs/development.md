@@ -43,7 +43,7 @@ Set `DATABASE_URL=postgres://opencoast:opencoast_local@localhost:54329/opencoast
 
 ## Hosted deployment
 
-The first hosted deployment uses dedicated [web](https://opencoast-web.vercel.app) and [API](https://opencoast-api.vercel.app/health) Vercel projects, Supabase PostgreSQL with PostGIS, and a **private** Cloudflare R2 bucket. Set each Vercel project's root directory to `web` or `api`. The web project's `web/vercel.ts` proxies `/api/*` to the API project so moderator cookies remain first-party. Set `VERCEL_API_ORIGIN` on the web project to the API HTTPS origin. Do not expose database or R2 credentials to the web build.
+The hosted deployment uses dedicated [web](https://opencoast.kaelux.dev) and [API](https://opencoast-api.vercel.app/health) Vercel projects, Supabase PostgreSQL with PostGIS, and a **private** Cloudflare R2 bucket. Set each Vercel project's root directory to `web` or `api`. The web project's `web/vercel.ts` proxies `/api/*` to the API project so moderator cookies remain first-party. Set `VERCEL_API_ORIGIN` on the web project to the API HTTPS origin. Do not expose database or R2 credentials to the web build. See [custom domain setup](domain-setup.md) for DNS and origin configuration.
 
 API environment:
 
@@ -51,7 +51,7 @@ API environment:
 | ------------------------------------------ | ------------------------------------------------------------------ |
 | `DATABASE_URL`                             | Supabase transaction pooler connection string with PostGIS enabled |
 | `DATABASE_SSL_CA_B64`                      | Base64-encoded Supabase root CA certificate for verified TLS       |
-| `WEB_ORIGIN`                               | Exact public web origin for CORS and moderator mutation checks     |
+| `WEB_ORIGIN`                               | Comma-separated exact web origins for CORS and moderator mutation checks |
 | `S3_ENDPOINT`                              | Cloudflare R2 account endpoint                                     |
 | `S3_REGION`                                | R2 region, normally `auto`                                         |
 | `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | R2 credentials restricted to the evidence bucket                   |

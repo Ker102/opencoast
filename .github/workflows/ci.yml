@@ -31,6 +31,10 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
+      - name: Check documentation translations
+        run: |
+          node --test tools/check-i18n-tests.mjs
+          node tools/check-i18n.mjs
       - run: npm run db:migrate -w api
       - run: npm test
       - run: npm run format:check

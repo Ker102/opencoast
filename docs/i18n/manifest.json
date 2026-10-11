@@ -1,0 +1,329 @@
+{
+  "schemaVersion": 1,
+  "sourceLanguage": "en",
+  "sourceOfTruth": "Current maintained English working-tree files; hashes include the README language switcher.",
+  "hashAlgorithm": "sha256",
+  "hashInput": "UTF-8 text with CRLF normalized to LF; no other normalization.",
+  "locales": [
+    "es",
+    "zh-CN",
+    "fr",
+    "ja",
+    "de",
+    "pt-BR"
+  ],
+  "sources": [
+    {
+      "path": "README.md",
+      "sha256": "94f5865984e7ef735eb71ea033ede24970c151226910b8b3d2dc7807efacbac2",
+      "mirrors": {
+        "es": {
+          "path": "docs/i18n/es/README.md",
+        "sha256": "ab88d9c52935bc208c407cd55800d6b052442834cfa6563a9022c6468f5cba3b",
+          "status": "complete"
+        },
+        "zh-CN": {
+          "path": "docs/i18n/zh-CN/README.md",
+        "sha256": "651235c209b88bfbd45c9be7c18d44e09d8cd69fa86d3b97206764a188e90987",
+          "status": "complete"
+        },
+        "fr": {
+          "path": "docs/i18n/fr/README.md",
+        "sha256": "70eff21fd37dc37370686dbc98b5ac7bcb341b6824a0215813c49a73e2ca27f1",
+          "status": "complete"
+        },
+        "ja": {
+          "path": "docs/i18n/ja/README.md",
+        "sha256": "8c7e44dd074ee3bec6ede9693bd6299f186297c9225fef9bd8eacc4e53b94fde",
+          "status": "complete"
+        },
+        "de": {
+          "path": "docs/i18n/de/README.md",
+        "sha256": "7300ae31aae50e17965b46ad53f901c237ff63849150ad064f400b4c4032edb1",
+          "status": "complete"
+        },
+        "pt-BR": {
+          "path": "docs/i18n/pt-BR/README.md",
+        "sha256": "8d7a8ecff73994acbbff28096b848e372492fd697cbecfb57cbffb104e818638",
+          "status": "complete"
+        }
+      }
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "1948e5f5f45d331984020a92efd37266f03e3bfea6b59a513790b805e26bf187",
+      "mirrors": {
+        "es": {
+          "path": "docs/i18n/es/CONTRIBUTING.md",
+          "sha256": "997dc04206857267c3aa63c14c72df04104ea3cca2e214736ed67f939d7952b4",
+          "status": "complete"
+        },
+        "zh-CN": {
+          "path": "docs/i18n/zh-CN/CONTRIBUTING.md",
+          "sha256": "9ea2d478c98bd48ab332b98859ccf82b0c6a175dcb0c9f21ad0fee93ff006291",
+          "status": "complete"
+        },
+        "fr": {
+          "path": "docs/i18n/fr/CONTRIBUTING.md",
+          "sha256": "e8dbfd9d2c439df10a75b5c54e46a0d8179948cf9af0d8e12c6718f13ef24554",
+          "status": "complete"
+        },
+        "ja": {
+          "path": "docs/i18n/ja/CONTRIBUTING.md",
+          "sha256": "8547737c67d45db76eee4551444d88d3967eab74687f1816198cd3e0afe87945",
+          "status": "complete"
+        },
+        "de": {
+          "path": "docs/i18n/de/CONTRIBUTING.md",
+          "sha256": "57bf948509be8550dff31e888405ca070f052cf7a365c22e603c4e905ac7e49f",
+          "status": "complete"
+        },
+        "pt-BR": {
+          "path": "docs/i18n/pt-BR/CONTRIBUTING.md",
+          "sha256": "49f6e6d39fbd829d53982b31bd9692d603a8422fd781328493a9ba39371c5b8c",
+          "status": "complete"
+        }
+      }
+    },
+    {
+      "path": "SECURITY.md",
+      "sha256": "e7d01570fb79be45686ccbf69801c894e47bc5c017030847eff1006646f949e6",
+      "mirrors": {
+        "es": {
+          "path": "docs/i18n/es/SECURITY.md",
+          "sha256": "369fc8b337afa11349f94e9f40c4a4a6d20a564f9e46551ff20a0e5fade531eb",
+          "status": "complete"
+        },
+        "zh-CN": {
+          "path": "docs/i18n/zh-CN/SECURITY.md",
+          "sha256": "248c322c122f9df3c9fb422d23d76ea79ca4a2a8bbb3d5d122b1383b8a86fce2",
+          "status": "complete"
+        },
+        "fr": {
+          "path": "docs/i18n/fr/SECURITY.md",
+          "sha256": "587276bf7876b10365434bb62f322d3632a9710ab8fb8ab41edebcf8196a7587",
+          "status": "complete"
+        },
+        "ja": {
+          "path": "docs/i18n/ja/SECURITY.md",
+          "sha256": "2fff615b1afed19ea487d309f762cecffdf32f1df1d36b0a54a45dcaeda0d297",
+          "status": "complete"
+        },
+        "de": {
+          "path": "docs/i18n/de/SECURITY.md",
+          "sha256": "ac30218532f3d9b108a23fe289e435bc4527483e1167b7b9e6ee9d6457d1729f",
+          "status": "complete"
+        },
+        "pt-BR": {
+          "path": "docs/i18n/pt-BR/SECURITY.md",
+          "sha256": "efe3c0fa7cc2e0142bf3f84bf8a3c8d6977e4489b1e65e68503e8f351ae764b4",
+          "status": "complete"
+        }
+      }
+    },
+    {
+      "path": "docs/development.md",
+      "sha256": "ceb8a03a48c39546d74822ce67b86a506fb93fec47e24cdded6796eda68a78aa",
+      "mirrors": {
+        "es": {
+          "path": "docs/i18n/es/docs/development.md",
+          "sha256": "a4ba873f78f812043e61165d18338676940e95bc5448dbb1794c5e24495c7276",
+          "status": "complete"
+        },
+        "zh-CN": {
+          "path": "docs/i18n/zh-CN/docs/development.md",
+          "sha256": "f10b83492c0f8c703f967490826b179ca302ef4339be9c3a6dc5e12e32568b2f",
+          "status": "complete"
+        },
+        "fr": {
+          "path": "docs/i18n/fr/docs/development.md",
+          "sha256": "8275693c900652c2fd0e27681733dbeaea7db0fbe1d27eade1defdcfd8e4d77f",
+          "status": "complete"
+        },
+        "ja": {
+          "path": "docs/i18n/ja/docs/development.md",
+          "sha256": "e884a970f7552534737eae79797d955d7ff7f4fbdae794cbbefc2f986eefb7a6",
+          "status": "complete"
+        },
+        "de": {
+          "path": "docs/i18n/de/docs/development.md",
+          "sha256": "02e67d56da894dc64d3a5477e1aa8851563d6ef92829b52a4a06cbe3f84d90c9",
+          "status": "complete"
+        },
+        "pt-BR": {
+          "path": "docs/i18n/pt-BR/docs/development.md",
+          "sha256": "aa49bc633ee4fb2f2a6a897245e61f2ff0f4352332fa5e730b58d315e9287818",
+          "status": "complete"
+        }
+      }
+    },
+    {
+      "path": "docs/moderation-policy.md",
+      "sha256": "c469cdd5d63090c5d42c93ed7c33ab3b500559c5e8fd7a42645555c00279beef",
+      "mirrors": {
+        "es": {
+          "path": "docs/i18n/es/docs/moderation-policy.md",
+          "sha256": "0f8dc529b77a7fb0385393cfa909f678181f0bd5acb6bb1e515481f027cca4f0",
+          "status": "complete"
+        },
+        "zh-CN": {
+          "path": "docs/i18n/zh-CN/docs/moderation-policy.md",
+          "sha256": "b8c13a9792f3ccf28ad8682f6f1cee5ee754e8ba9a0669141733891d3faa8323",
+          "status": "complete"
+        },
+        "fr": {
+          "path": "docs/i18n/fr/docs/moderation-policy.md",
+          "sha256": "41cb3dcd8ceb19ca4830bf52903e1c8d6f03eaa0b584d549e03fa771506d3726",
+          "status": "complete"
+        },
+        "ja": {
+          "path": "docs/i18n/ja/docs/moderation-policy.md",
+          "sha256": "416bb4cdac845ed41da0fccab329ad1c92cc961798fdbe5d59de0593898a3486",
+          "status": "complete"
+        },
+        "de": {
+          "path": "docs/i18n/de/docs/moderation-policy.md",
+          "sha256": "ec945faf14c7e93b640e6795faa31789fa5e97c13866870e728519a6f39d1d17",
+          "status": "complete"
+        },
+        "pt-BR": {
+          "path": "docs/i18n/pt-BR/docs/moderation-policy.md",
+          "sha256": "2bb9e93610eb275867ab98f6eae4cbdb504e74a45297771ec2af257e914093c7",
+          "status": "complete"
+        }
+      }
+    },
+    {
+      "path": "docs/discovery.md",
+      "sha256": "2b8a4cac9d80088d73cdec41c530d40c5fd02980810f32e576abd50be08e8806",
+      "mirrors": {
+        "es": {
+          "path": "docs/i18n/es/docs/discovery.md",
+          "sha256": "2e12527a3575c19e902d40de9de848e92d714879014841f52125c737647b9a51",
+          "status": "complete"
+        },
+        "zh-CN": {
+          "path": "docs/i18n/zh-CN/docs/discovery.md",
+        "sha256": "5422293a4ca9608ac8ad6af2ec8caf7a04a303c2bf68cf9d52873a170c6cb826",
+          "status": "complete"
+        },
+        "fr": {
+          "path": "docs/i18n/fr/docs/discovery.md",
+          "sha256": "0226b31c257779628e1b73daf9140bba138d792904406fbfc56bbf7da072f6b9",
+          "status": "complete"
+        },
+        "ja": {
+          "path": "docs/i18n/ja/docs/discovery.md",
+          "sha256": "74fd813eec15b6fc53d6941918a44e96e59d823e612862b5307fa92d6e9116af",
+          "status": "complete"
+        },
+        "de": {
+          "path": "docs/i18n/de/docs/discovery.md",
+          "sha256": "ed03c258aa0cb019ff0e352d7cb6305c6a7bf6ee9d529e37f63f66b4765cd39d",
+          "status": "complete"
+        },
+        "pt-BR": {
+          "path": "docs/i18n/pt-BR/docs/discovery.md",
+          "sha256": "bc79c5b1876c2f065ae66badec3330a87e9f0c4bb10a8c1972135f073751a12e",
+          "status": "complete"
+        }
+      }
+    },
+    {
+      "path": "docs/domain-setup.md",
+      "sha256": "e15cb75f333dd68b92a36abec6f8b6bb5603f938ea7a8829f082fe1c64958fa6",
+      "mirrors": {
+        "es": {
+          "path": "docs/i18n/es/docs/domain-setup.md",
+          "sha256": "a769c689cd89662465f085e1f4d20915ad165ca9499338d6d0352e54ff566a92",
+          "status": "complete"
+        },
+        "zh-CN": {
+          "path": "docs/i18n/zh-CN/docs/domain-setup.md",
+        "sha256": "92826eef79d8993f94331d6db190709ae91f0ad091db62487c3ea965c03f7f38",
+          "status": "complete"
+        },
+        "fr": {
+          "path": "docs/i18n/fr/docs/domain-setup.md",
+          "sha256": "5151b10f5f460ec4a3a05d815d3f7ea012209183605b533e7dc6d23ee0ebb75a",
+          "status": "complete"
+        },
+        "ja": {
+          "path": "docs/i18n/ja/docs/domain-setup.md",
+          "sha256": "5738add87a9cd7112a028de527052b6ec6daf9547a21bb1bbd4b1111482daf95",
+          "status": "complete"
+        },
+        "de": {
+          "path": "docs/i18n/de/docs/domain-setup.md",
+          "sha256": "730cc15c35fc1a0896301bf1edbdc9b12e4cf17cd7bace285eefb7612bd66717",
+          "status": "complete"
+        },
+        "pt-BR": {
+          "path": "docs/i18n/pt-BR/docs/domain-setup.md",
+          "sha256": "d10ad5740cae5fd0949bccb7efea3f9c17482ced668da4612602490cea9d2df3",
+          "status": "complete"
+        }
+      }
+    }
+  ],
+  "pending": [],
+  "excluded": [
+    {
+      "paths": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "task.md",
+        "**/progress*",
+        "docs/i18n/implementation-plan.md"
+      ],
+      "reason": "Agent instructions and internal task/progress/planning records are not public translation sources."
+    },
+    {
+      "paths": [
+        "docs/plans/**",
+        "docs/design-reference/**"
+      ],
+      "reason": "Historical plans and visual design concepts are outside maintained public documentation scope."
+    },
+    {
+      "paths": [
+        "artifacts/**",
+        ".local-evidence/**",
+        "**/node_modules/**",
+        "vendor/**"
+      ],
+      "reason": "Generated run records, private local evidence and vendor documentation are excluded."
+    },
+    {
+      "paths": [
+        "tools/motion/**"
+      ],
+      "reason": "Motion development documentation/assets are explicitly excluded."
+    },
+    {
+      "paths": [
+        "LICENSE",
+        "CITATION.cff",
+        "web/public/**"
+      ],
+      "reason": "Canonical legal/machine-readable originals and generated hosted pages remain untranslated; no application behavior changes."
+    }
+  ],
+  "review": {
+    "method": "Translator review against the current English sources plus deterministic structural and technical-token validation.",
+    "focus": [
+      "access status versus evidence strength",
+      "separate area and route review",
+      "approximate geometry",
+      "private originals and optional publication consent",
+      "authentication and origin limits",
+      "isolated test database",
+      "no open-data license",
+      "dated verification claims and unresolved advisories"
+    ],
+    "limitations": [
+      "No independent native-speaker review.",
+      "Automated checks do not prove semantic equivalence or verify remote services."
+    ]
+  }
+}

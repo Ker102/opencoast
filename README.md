@@ -2,11 +2,17 @@
 
 # OpenCoast — Open-source coastal access map
 
+[English](README.md) · [Español](docs/i18n/es/README.md) · [简体中文](docs/i18n/zh-CN/README.md) · [Français](docs/i18n/fr/README.md) · [日本語](docs/i18n/ja/README.md) · [Deutsch](docs/i18n/de/README.md) · [Português (Brasil)](docs/i18n/pt-BR/README.md)
+
 **Beach access rights, routes to shore, and the evidence behind them.**
+
+**No account. No sign-in. Browse and contribute anonymously.**
 
 OpenCoast is an open-source web app for mapping community-reviewed information about **public beach access and coastal access rights**. People can draw coastal areas, paths to the shore, and access points; add descriptions, local conditions, and sources; and submit them anonymously. Moderators review each proposal before it appears on the public map.
 
-[Explore the map](https://opencoast-web.vercel.app/) · [Contribute](CONTRIBUTING.md) · [How review works](docs/moderation-policy.md) · [Development guide](docs/development.md) · [Roadmap](https://github.com/Ker102/opencoast/issues)
+[Explore the map](https://opencoast.kaelux.dev/) · [Contribute](CONTRIBUTING.md) · [How review works](docs/moderation-policy.md) · [Development guide](docs/development.md) · [Roadmap](https://github.com/Ker102/opencoast/issues)
+
+New to the project? Read [what OpenCoast is for](https://opencoast.kaelux.dev/about), [how to use and contribute to the map](https://opencoast.kaelux.dev/how-it-works), and [what its evidence labels mean](https://opencoast.kaelux.dev/evidence). These public pages are readable without JavaScript. [Discovery setup and verification](docs/discovery.md) covers the site's canonical URLs, sitemap and crawler policy. [Motion drafts and recording guide](tools/motion/README.md) explains the editable project videos.
 
 [![CI](https://github.com/Ker102/opencoast/actions/workflows/ci.yml/badge.svg)](https://github.com/Ker102/opencoast/actions/workflows/ci.yml) · [Code license: MIT](LICENSE)
 
@@ -19,6 +25,12 @@ Finding a beach on a map leaves several questions unanswered: What access is per
 OpenCoast brings those questions into one map. Each record ties a specific location to a description, jurisdiction, access status, evidence label, and review history. The project is useful to residents, coastal visitors, community mappers, source researchers, and developers building public-interest mapping tools.
 
 Created by **[Kristofer Jussmann (Ker102)](https://github.com/Ker102)**, OpenCoast began with concerns about coastal access in Montenegro. Its scope is global; the [first Montenegro records](https://github.com/Ker102/opencoast/issues/5) are a source-review effort, not a preloaded set of legal conclusions.
+
+## Anonymous by default
+
+OpenCoast aims to make coastal access information available without requiring people to identify themselves. You can browse the map, submit a location, propose a correction, and follow the review without an account, sign-in, name, or email address. Keep your private receipt link to check progress and answer moderator questions.
+
+Original evidence uploads are private to moderators. Only separately approved images with publication consent can appear publicly. Avoid including personal details in descriptions or evidence you want published. Moderator tools require a separate sign-in.
 
 ## What can you map?
 
@@ -64,7 +76,7 @@ Hand-drawn boundaries are labeled approximate. An edit date does not imply a new
 
 ## Contribute beach-access information
 
-1. **Find the location** in the [live map](https://opencoast-web.vercel.app/). Pan and zoom, or enter `latitude, longitude`; place-name search is [planned](https://github.com/Ker102/opencoast/issues/6).
+1. **Find the location** in the [live map](https://opencoast.kaelux.dev/). Pan and zoom, or enter `latitude, longitude`; place-name search is [planned](https://github.com/Ker102/opencoast/issues/6).
 2. **Choose Add information** and draw an area, route, or point. Existing records also accept proposed corrections.
 3. **Describe the claim:** include the jurisdiction, local category where useful, conditions, and what you observed or read.
 4. **Add sources and evidence.** Official documents and direct links are strongly encouraged, but they are optional. Original uploads are private to moderators; only separately approved images with publication consent can appear publicly.
@@ -163,4 +175,4 @@ See the [project design](docs/plans/2026-09-24-opencoast-design.md) and [progres
 
 For articles, research, or software reuse, link to [OpenCoast on GitHub](https://github.com/Ker102/opencoast) and use [CITATION.cff](CITATION.cff) for software citation details. Citing the software does not verify any particular coastal access claim.
 
-Project overview last reviewed: **2026-09-28**.
+Project overview last reviewed: **2026-10-06**.
