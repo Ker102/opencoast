@@ -15,5 +15,6 @@ export async function moderatorId(request: FastifyRequest): Promise<string | nul
 }
 
 export function validMutationOrigin(request: FastifyRequest): boolean {
-  return request.headers.origin === config.webOrigin;
+  const origin = request.headers.origin;
+  return typeof origin === 'string' && config.webOrigins.includes(origin);
 }

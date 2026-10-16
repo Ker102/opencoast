@@ -12,7 +12,10 @@ export const config = {
       ? (process.env.PORT ?? (process.env.VERCEL ? 3000 : 8080))
       : (process.env.API_PORT ?? 4000),
   ),
-  webOrigin: process.env.WEB_ORIGIN ?? 'http://localhost:5173',
+  webOrigins: (process.env.WEB_ORIGIN ?? 'http://localhost:5173')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean),
   cookieSecure: process.env.COOKIE_SECURE !== 'false' && process.env.NODE_ENV === 'production',
   localEvidenceDir:
     process.env.LOCAL_EVIDENCE_DIR ??

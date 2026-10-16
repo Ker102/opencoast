@@ -1,0 +1,6 @@
+{
+  "name": "opencoast-motion-drafts",
+  "private": true,
+  "scripts": { "stills": "node render.cjs stills", "video": "node render.cjs video", "social": "node render.cjs social" },
+  "dependencies": { "@napi-rs/canvas": "0.1.100" }
+}

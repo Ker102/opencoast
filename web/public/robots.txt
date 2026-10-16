@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /receipt/
+Disallow: /moderation
+Disallow: /contribute
+
+Sitemap: https://opencoast.kaelux.dev/sitemap.xml

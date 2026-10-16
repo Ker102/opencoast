@@ -1,10 +1,10 @@
 # OpenCoast motion drafts
 
-Two silent, editable drafts explain two goals: understand coastal access and contribute evidence. Revision 2 uses square component edges, curved coastlines and connectors, Space Grotesk/Manrope typography, and official Phosphor duotone symbols. Each is 40 seconds, 1280 × 720, 60 fps, H.264. Current outputs live in the ignored `artifacts/opencoast-motion/2026-10-10/v2/` folder. The combined preview is one level above; original media remains available there.
+Two silent, editable drafts explain two goals: understand coastal access and contribute evidence. Revision 4 extends both to 96 seconds and covers location, local categories, legal conditions, observed barriers, coast details, documents, evidence labels, edit/review dates and contributions. The cursor is white with a black outline. Status colors are green allowed, amber conditional and red restricted; proposed routes are dashed purple. Legends and detail panels sit on pale backgrounds for contrast. Square edges, curved connectors, Space Grotesk/Manrope typography and official Phosphor symbols are retained. Current outputs are 1280 × 720, 60 fps, H.264, in the ignored `artifacts/opencoast-motion/2026-10-11/v4/` folder. The combined preview is one level above; earlier sources and media remain available.
 
-- `draft-a-workflow.mp4`: cream editorial composition with large headlines, a square map plate and a curved knowledge-to-source-to-review diagram.
-- `draft-b-map.mp4`: deep teal cartography with separate area and route overlays, a smooth cursor drawing demonstration and square evidence/review panels. Example records are explicitly illustrative, with no real legal claim.
-- `contact-sheet.png`: eight representative frames, with A in the left column and B in the right.
+- `draft-a-workflow.mp4`: detailed editorial explanations, local category examples, a map/obstruction example, coast details, documents and contribution steps.
+- `draft-b-map.mp4`: map walkthrough with sequential status highlights, a reported barrier, a slow camera focus, sources and dates, and a drawing/submission example. Example records and geography are explicitly illustrative, with no real legal claim.
+- `contact-sheet.png`: fourteen chapter frames, with A in the left column and B in the right.
 
 ## Re-render
 
@@ -17,11 +17,21 @@ node render.cjs video-b
 node render.cjs social
 ```
 
-`scenes-v2.cjs` contains the current editable copy, shapes, colors and time-based motion. `scenes.cjs` preserves the original design and social-card function. The renderer uses cubic easing over 1.25 seconds for transitions, several seconds for cursor movement and long reading holds. There is no voice track, music or simulated performance claim. The social command retains the site's original deterministic share card.
+`scenes-v4.cjs` contains the current copy, chapters, layout and motion. `cartography-v4.cjs` contains cached geography, status overlays, hatched conditional/restricted examples and transformed route geometry. Cursor positions share the drawn route geometry and camera transform. Earlier scene/map modules preserve previous designs. Transitions use cubic easing over 1.25 seconds, several seconds for cursor movement and long reading holds. There is no audio or simulated performance claim. The social command retains the site's original share card.
 
-Official icon SVGs and their MIT license are in `assets/`. To rebuild those assets, set `OPENCOAST_PHOSPHOR_DIR` to an installed `@phosphor-icons/react` directory and run `node tools/motion/build-icons.mjs` from the repository root. The assets are already included, so that library is not needed for normal rendering.
+| Chapter | Time |
+| --- | --- |
+| Beach location and approach | 0–12 s |
+| Local categories and access conditions | 12–25 s |
+| Reported barriers and route rights | 25–38 s |
+| Coast surface, activities and observations | 38–51 s |
+| Documents, evidence labels and dates | 51–65 s |
+| Anonymous contribution and human review | 65–87 s |
+| Closing | 87–96 s |
 
-`verify.cjs` checks media format, full decoding, browser seeking/playback and desktop/mobile preview layout. It needs FFprobe, FFmpeg, an installed Playwright module (or `OPENCOAST_PLAYWRIGHT_MODULE`), Edge and the combined preview served at `http://127.0.0.1:5189/`. The latest results are in `v2/playback-report.json` alongside the videos.
+Official icon SVGs and their MIT license are in `assets/`. The standard cursor styles the official Phosphor fill geometry with white fill and black stroke. To rebuild assets, set `OPENCOAST_PHOSPHOR_DIR` to an installed `@phosphor-icons/react` directory and run `node tools/motion/build-icons.mjs` from the repository root. Assets are included, so that library is not needed for rendering.
+
+`verify.cjs` checks media format, full decoding, browser seeking/playback across every chapter and desktop/mobile preview layout. It needs FFprobe, FFmpeg, an installed Playwright module (or `OPENCOAST_PLAYWRIGHT_MODULE`), Edge and the combined preview served at `http://127.0.0.1:5190/` (or `OPENCOAST_PREVIEW_URL`). The latest results are in `v4/playback-report.json` alongside the videos. Set `OPENCOAST_CANVAS_MODULE` for both rendering and verification when using an existing bundled installation.
 
 ## Suggested real UI recordings
 

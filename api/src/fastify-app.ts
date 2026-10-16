@@ -56,7 +56,7 @@ export function fastifyOptions() {
 export function createApp(app = Fastify(fastifyOptions())) {
   app.register(cookie);
   app.register(cors, {
-    origin: config.webOrigin,
+    origin: config.webOrigins,
     credentials: true,
     methods: ['GET', 'HEAD', 'POST', 'PUT'],
   });

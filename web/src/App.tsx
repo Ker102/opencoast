@@ -190,8 +190,13 @@ export default function App() {
               <h1>Know your coast.</h1>
               <p>
                 Explore reviewed coastal access information, understand local conditions, and help
-                improve the map.
+                improve the map. No account needed.
               </p>
+              <nav className="project-links" aria-label="About OpenCoast">
+                <a href="/about">About</a>
+                <a href="/how-it-works">How it works</a>
+                <a href="/evidence">Evidence labels</a>
+              </nav>
             </div>
             <div className="legend">
               <h2>On the map</h2>

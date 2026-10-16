@@ -1,0 +1,14 @@
+artifacts/
+.playwright-cli/
+output/
+docs/
+tools/
+.local-evidence/
+**/dist/
+**/dist-types/
+**/*.tsbuildinfo
+**/.env
+**/.env.local
+**/.env.*.local
+**/.vercel/
+supabase/.temp/

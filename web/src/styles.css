@@ -1450,3 +1450,15 @@ textarea {
 .route-choice .text-button {
   margin: 8px 0 0 27px;
 }
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 15px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.project-links a {
+  color: var(--teal, #0d5962);
+  text-underline-offset: 4px;
+}

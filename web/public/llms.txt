@@ -1,0 +1,23 @@
+# OpenCoast
+
+> A community-built map of beach and coastal access areas, routes, conditions and evidence.
+
+OpenCoast has one purpose: make local coastal access information and its supporting evidence visible. No account is needed to browse, submit information or suggest a correction. Every published change is reviewed by moderators.
+
+## Public pages
+
+- [OpenCoast | Beach access, coastal rights and routes to shore](https://opencoast.kaelux.dev/): Explore coastal access areas, routes and evidence on OpenCoast. Contribute beach access information anonymously, without an account. Every published change is reviewed.
+- [About OpenCoast | A map for public coastal access](https://opencoast.kaelux.dev/about): Why OpenCoast exists: make beach access rights, conditions, routes and evidence easier to understand. Open-source software, anonymous contributions and moderator review.
+- [How OpenCoast works | Browse and contribute beach access information](https://opencoast.kaelux.dev/how-it-works): Learn how to read OpenCoast records, draw coastal areas and access routes, add sources anonymously, and follow moderator review with a private receipt.
+- [OpenCoast evidence and access labels | Understand a coastal access claim](https://opencoast.kaelux.dev/evidence): Understand allowed, conditional, restricted, disputed and unknown coastal access, document-backed evidence, community review, approximate boundaries and edit dates.
+- [Source code](https://github.com/Ker102/opencoast): MIT-licensed software, contribution instructions and project limitations.
+
+## How to interpret records
+
+Access status and evidence strength are separate. Statuses are allowed, conditional, restricted, disputed and unknown. Document-backed records have an official linked source checked by a moderator. Community-reviewed records without a verified official source have a separate label. Unmarked areas have no reviewed information, not an implied right or prohibition. Boundaries may be approximate. Access to an area and access along a route must be checked separately. Last edits and source review dates are distinct.
+
+## Coverage and ownership
+
+Worldwide navigation is available; local coverage depends on approved submissions and is incomplete. Rules vary by jurisdiction. OpenCoast is not an official legal authority. The software is open source; the operator-managed database has no public open-data license asserted. Basemap: OpenFreeMap with OpenStreetMap attribution. Created by Kristofer Jussmann.
+
+Summary updated: 2026-10-10. This file is an optional reading aid, not a verified indexing protocol.
